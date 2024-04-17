@@ -4,16 +4,14 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class user
 {
 public:
   // GET FUNCTIONS
-  int getBookIndex(string bookName) const; // Returns the index of bookName in the user's book list.
+  int getBookIndex(std::string bookName) const; // Returns the index of bookName in the user's book list.
   // Postcondition: Returns the index of the book in the book array. If it doesn't exist, returns -1.
 
-  bool hasBook(string bookName) const; // Checks to see if this user has a book of bookName.
+  bool hasBook(std::string bookName) const; // Checks to see if this user has a book of bookName.
   // Postcondition: Returns true if bookName is in the user's book list, false otherwise.
 
   bool isAdmin() const; // Checks to see if this user is an admin.
@@ -22,29 +20,29 @@ public:
   bool hasMaxBooks() const; // Checks to see if the user has the maximum number of books.
   // Postcondition: Returns true if the user has the maximum number of books, false otherwise.
 
-  string getUsername() const; // Returns the username of the user.
-  // Postcondition: Returns the string of the username.
+  std::string getUsername() const; // Returns the username of the user.
+  // Postcondition: Returns the std::string of the username.
 
   // SET FUNCTIONS
 
-  void addBook(string bookName); // Adds a book to the user's inventory.
-  void removeBook(string bookName); // Removes a book from the user's inventory if it has the book.
+  void addBook(std::string bookName); // Adds a book to the user's inventory.
+  void removeBook(std::string bookName); // Removes a book from the user's inventory if it has the book.
 
   // PRINT FUNCTIONS
 
   void printBooks() const; // Prints out the user's books.
   void printName() const; // Prints the username of the user
 
-  user(string name, bool ad); // Basic constructor function.
+  user(std::string name, bool ad); // Basic constructor function.
 
 private:
   bool admin; // Whether or not the user is an admin.
-  string username; // Username of the user.
-  string books[5]; // String array of books the user owns.
+  std::string username; // Username of the user.
+  std::string books[5]; // String array of books the user owns.
   int bookCount = 0; // Count of how many users the book has.
 };
 
-int user::getBookIndex(string bookName) const {
+int user::getBookIndex(std::string bookName) const {
   for (int i = 0; i < 5; i++)
     if (books[i] == bookName)
       return i;
@@ -52,7 +50,7 @@ int user::getBookIndex(string bookName) const {
   return -1;
 }//end getBookIndex
 
-bool user::hasBook(string bookName) const 
+bool user::hasBook(std::string bookName) const 
 { return (getBookIndex(bookName) != -1); }//end hasBook
 
 bool user::isAdmin() const 
@@ -61,12 +59,12 @@ bool user::isAdmin() const
 bool user::hasMaxBooks() const
 { return bookCount == 5; }//end hasMaxBooks
 
-string user::getUsername() const
+std::string user::getUsername() const
 { return username; }//end getUsername
 
-void user::addBook(string bookName) {
-  if (not hasBook(bookName)) // If the user doesn't have the book already
-    if (not hasMaxBooks()) // If the user's book count isn't full
+void user::addBook(std::string bookName) {
+  if (!hasBook(bookName)) // If the user doesn't have the book already
+    if (!hasMaxBooks()) // If the user's book count isn't full
     {
       int i = 0;
       while(books[i] != "")
@@ -75,31 +73,31 @@ void user::addBook(string bookName) {
           
       bookCount += 1; // Increment book count by 1
     } else
-      cout << "You have the maximum number of books." << endl;//end else
+      std::cout << "You have the maximum number of books." << std::endl;//end else
     else
-      cout << "You already have this book." << endl;//end else
+      std::cout << "You already have this book." << std::endl;//end else
 }//end addBook
 
-void user::removeBook(string bookName) {
+void user::removeBook(std::string bookName) {
   int index = getBookIndex(bookName);
   if (index >= 0) { // If the index is valid
     books[index] = ""; // Remove the book from the array
     bookCount -= 1;
   } else
-    cout << "You do not have this book." << endl;
+    std::cout << "You do not have this book." << std::endl;
 }//end removeBook
 
 void user::printBooks() const {
-  cout << "Books: " << endl;
+  std::cout << "Books: " << std::endl;
   for (int i = 0; i < 5; i++)
-    cout << books[i] << endl;
+    std::cout << books[i] << std::endl;
 }//end printBooks
 
 void user::printName() const {
-  cout << username << endl;
+  std::cout << username << std::endl;
 }//end printName
 
-user::user(string name, bool ad) {
+user::user(std::string name, bool ad) {
   username = name;
   admin = ad;
 }//end constructor

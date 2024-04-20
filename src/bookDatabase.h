@@ -46,9 +46,10 @@ void bookDatabase::printAllLoans()
       if (current->info.isBorrowed())
       {
         current->info.printTitle();
-        cout << current->info.currentBorrower();
+        cout << "Current Borrower: " << current->info.currentBorrower() << endl;
       }
       current = current->link;
+      cout << endl;
     }
 }// end printAllLoans
 

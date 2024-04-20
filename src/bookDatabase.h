@@ -15,6 +15,10 @@ public:
   // Precondition: The book exists in the book database.
   // Postcondition: Returns a book if its found, returns an empty book if not.
 
+  // LOAN FUNCTIONS
+  void printAllLoans();
+
+  // DATA MANAGEMENT FUNCTIONS
   void loadFromFile(ifstream inFile); // *Alyssa* Function to load the address book from a file
   void saveToFile(ofstream outFile); // *Alyssa* Function to save the address book to a file
 };
@@ -31,5 +35,22 @@ book bookDatabase::getBookFromTitle(std::string title) {
 
   return book(); // If no book is found, return an empty book
 }//end getBookFromTitle
+
+void bookDatabase::printAllLoans()
+{
+    nodeType<book>* current; // pointer to traverse the linked list
+    current = first;
+
+    while (current != nullptr)
+    {
+      if (current->info.isBorrowed())
+      {
+        current->info.printTitle();
+        cout << current->info.currentBorrower();
+      }
+      current = current->link;
+    }
+}// end printAllLoans
+
 
 #endif

@@ -49,7 +49,7 @@ int main()
           getline(cin, username);
           cout << "Enter your password: " << endl;
           getline(cin, pass);
-          systemStatus = USER; // temporary, for testing purposes,
+          status = USER; // temporary, for testing purposes,
                                // may be changed when authentication method is developed by Trenten/Jonathan
           // code to check user is valid and output "Invalid username and password, please try again."
           // may be coded later, i.e. week 8
@@ -81,48 +81,11 @@ int main()
       // code for user menu
 
       // print user menu
-			
       // input user selection
-
       // process selection
-			// switch(choice)
-			//{
-					// SEARCH FOR BOOKS
-					// case 1:
-					// input title
-					// search for title
-					// if not present, print relevant message
-					// if present, print book information
-					
-					// BORROW A BOOK
-					// case 2:
-					
-					// RETURN A BOOK
-					// case 3:
-					// print the titles of user's current loans, I.e.:
-						// 1. Jack and the Beanstalk
-						// 2. Little Women
-						// etc.
-					// get user choice
-					// remove book from user's list of borrowed books
-					// pop book borrower queue
-					// while(current borrower has borrowed max books || current borrower username does not exist)
-						// pop borrower queue
-					
-					// VIEW BORROWED BOOKS
-					// case 4:
-					
-					// UPDATE PROFILE
-					// case 5:
-					
-					// LOGOUT
-					// case 6:
-					// status = HOME; // set status to HOME to return to home menu
-					
-					// default:
-				
-			//}
-			
+      // set status to...
+          // HOME to return to the home menu
+          // EXIT to exit the program
     }// end while for user menu
 
     while (status == ADMIN) // loop for admin menu

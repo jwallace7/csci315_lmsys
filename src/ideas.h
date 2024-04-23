@@ -18,6 +18,4 @@ Search
  - If no direct match, show closest matches
  - If direct match, show book information
 
-/// FIND UNIQUE IDENTIFIER FOR BOOK
-
 */

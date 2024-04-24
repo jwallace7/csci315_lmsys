@@ -23,10 +23,13 @@ public:
   // Otherwise, this returns an empty user with a warning message displayed.
 
   // INSERT/REMOVAL FUNCTIONS
-  void registerUser(user newUser); 
-  // Function that either adds or updates a user.
-  // If a user doesn't exist with the username, then it creates a user.
-  // If a user exists with the username, then it updates the user.
+  void addUser(user newUser); 
+  // Adds a new user to the hashmap / the user database.
+  // Precondition: Requires that a user with the username of newUser does not
+  // already exist in the database. Otherwise, a new user is not created.
+  void updateUser(user updatedUser);
+  // Updates the user's data on the map.
+  // Precondition: Requires that a user with username exists to replace the data.
   void removeUser(const std::string username);
   // Removes a user from the hashmap based on the provided username.
   // Precondition: A user of the username provided exists in the database.
@@ -51,16 +54,26 @@ bool userDatabase::findUser(const std::string& username) const
 user userDatabase::getUser(const std::string username) const
 { return users.at(username); }//end getUser
 
-
-
 // INSERT/REMOVAL FUNCTIONS
-void userDatabase::registerUser(user newUser)
+void userDatabase::addUser(user newUser)
 {
     std::string username = newUser.getUsername();
-    std::string action = (findUser(username)) ? " updated." : " created.";
-    users[username] = newUser;
-    std::cout << "User " << username << action << std::endl;
-}
+
+    if (!findUser(username))
+        users.insert({username, newUser});
+    else
+        std::cout << "User " << username << " already exists." << std::endl;
+}//end addUser
+
+void userDatabase::updateUser(user updatedUser)
+{
+    std::string username = updatedUser.getUsername();
+
+    if (findUser(username))
+        users[username] = updatedUser;
+    else
+        std::cout << "User " << username << " does not exist." << std::endl;
+}//end updateUser
 
 void userDatabase::removeUser(const std::string username)
 {

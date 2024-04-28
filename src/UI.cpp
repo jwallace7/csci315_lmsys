@@ -82,10 +82,71 @@ int main()
 
       // print user menu
       // input user selection
-      // process selection
-      // set status to...
-          // HOME to return to the home menu
-          // EXIT to exit the program
+      // process selection (below)
+			
+			// switch(choice)
+			//{
+					// SEARCH FOR BOOKS
+					// case 1:
+					// input title
+					// search for title
+					// if not present, print relevant message
+					// if present, print book information
+					
+					// BORROW A BOOK
+					// case 2:
+					// input title
+					// if(book exists)
+						// if(book is available)
+							// add to user's book list
+							// output relevant message, also indicate number of books left
+						// else(book is currently borrowed)
+							// output relevant message saying the book is on hold for them
+						// add username to books borrower queue
+					// else (book does not exist)
+						// output relevant message
+						// maybe - show 
+					
+					// RETURN A BOOK
+					// case 3:
+					// print the titles of user's current loans, I.e.:
+						// 1. Jack and the Beanstalk
+						// 2. Little Women
+						// etc.
+					// get user choice
+					// remove book from user's list of borrowed books
+					// pop book borrower queue
+					// while(current borrower has borrowed max books || current borrower username does not exist)
+						// pop borrower queue
+					
+					// VIEW BORROWED BOOKS
+					// case 4:
+					// code to print users borrowed books
+					// maybe - option to return to menu? this way user can view list as long as they wish
+					
+					// UPDATE PROFILE - Can reuse a lot of code between here and REGISTER
+					// case 5:
+						// print options for what the user can change (password, name, age, etc.)
+						// get user choice
+						// switch(choice)
+						// {
+									// PASSWORD
+									// case 1:
+									//	 code to change password
+									// NAME
+									// case 2:
+									//   code to change name
+									// ...
+									// default:
+						// }
+					
+					// LOGOUT
+					// case 6:
+					// cout << "You have been successfully logged out.\n";
+					// status = HOME; // set status to HOME to return to home menu
+					
+					// default:	
+			//}
     }// end while for user menu
 
     while (status == ADMIN) // loop for admin menu
@@ -95,6 +156,27 @@ int main()
       // print admin menu
       // input user selection
       // process selection
+			
+			// switch(choice)
+			// {
+					// ADD A BOOK
+					// case 1:
+					// ...
+					// REMOVE A BOOK
+					// case 2:
+					// ...
+					// UPDATE BOOK INFORMATION
+					// case 3:
+					// ...
+					// VIEW ALL LOANS
+					// case 4:
+					// ...
+					// ADD/REMOVE USER (ADMINS)
+					// case 5:
+					// ...
+					// LOGOUT
+					// case 6:
+			// }
       // set status to...
           // HOME to return to the home menu
           // EXIT to exit the program

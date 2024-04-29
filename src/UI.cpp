@@ -22,7 +22,9 @@ int main()
   string pass;
   bookDatabase library; // database with all books in the library
   systemStatus status = HOME;
-  user* tempCurrentUser; // TEMPORARY, for testing
+  user* currentUser; // will be the current loaded user in the system
+	book* tempBook; //will be a temp book, for adding a book to the system
+	user* newUser; // used for adding a new user to the database
   // eventually create a user database of some kind
 
   // will eventually need code to load data from file
@@ -161,19 +163,59 @@ int main()
 			// {
 					// ADD A BOOK
 					// case 1:
-					// ...
+					// Prompt for title
+					// Input title
+					// if (book already exists)
+						// output relevant message
+						// 
+					// update tempBook
+					// Prompt for author
+					// Input author
+					// Update tempBook
+					// Prompt for date published
+					// Input date published
+					// Update tempBook
+					// prompt for catalog number
+					// input catalog number
+					// update tempBook
+					// add tempBook to library
+					// break;
+					
 					// REMOVE A BOOK
 					// case 2:
-					// ...
+					// Prompt for title
+					// If book exists
+						// print book information
+						// ask user for confirmation
+						// if user confirms
+							// delete book
+					// else
+						// print relevant message (i.e., "book does not exist in library")
+					// break;
+					
 					// UPDATE BOOK INFORMATION
 					// case 3:
-					// ...
+					// prompt for title
+					// if book exists
+						// Output book information
+						// Prompt for which option to edit (I.e., 1 - Title, 2 - Author)
+						// switch(choice)
+						// {
+							// TITLE
+							// AUTHOR
+							// DATE PUBLISHED
+							// CATALOG NUMBER
+						// }
+						// break;
+						
 					// VIEW ALL LOANS
 					// case 4:
-					// ...
+					// iterate through binary search tree (maybe develop as function in BST class? - Trenten/Jonathan)
+					// if book is on loan, print
+					
 					// ADD/REMOVE USER (ADMINS)
 					// case 5:
-					// ...
+					// 
 					// LOGOUT
 					// case 6:
 			// }

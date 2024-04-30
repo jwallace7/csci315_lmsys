@@ -13,6 +13,10 @@ void displayPreMenu();
 void displayMenuUser();
 void displayMenuAdmin();
 
+// 4-30-24
+// Note to Samantha:
+// I've worked to get the home menu to a test-ready state.
+// Please work on options 1, 4 and 6 for the user menu.
 
 int main()
 {
@@ -22,18 +26,24 @@ int main()
   string pass;
   bookDatabase library; // database with all books in the library
   systemStatus status = HOME;
-  user* currentUser; // will be the current loaded user in the system
+	userDatabase userList;
+  user currentUser("", "", false); // will be the current loaded user in the system
 	book* tempBook; //will be a temp book, for adding a book to the system
 	user* newUser; // used for adding a new user to the database
   // eventually create a user database of some kind
 
-  // will eventually need code to load data from file
-  // into the "library" variable, working with Alyssa for this
+  // code to load data from booko database file into library
+	// code to load data from user database file into userList
 
   while (status != EXIT) // while user does not exit, continue looping
   {
-    while (status == HOME) // loop for home menu
+		//***HOME MENU***//
+    while (status == HOME) // while loop for home menu
     {
+			// reinitialize variables
+			username = "";
+			pass = "";
+			
       // display home menu
       displayPreMenu();
 
@@ -45,39 +55,94 @@ int main()
       // process user selection
       switch(choice)
       {
-        // LOGIN
+        // LOGIN - Ready for testing, but need to overload = operator in user.h first
         case 1:
-          cout << "Enter your username: " << endl; //admin's username is Admin
-          getline(cin, username);
-          cout << "Enter your password: " << endl;
-          getline(cin, pass);
-          status = USER; // temporary, for testing purposes,
-                               // may be changed when authentication method is developed by Trenten/Jonathan
-          // code to check user is valid and output "Invalid username and password, please try again."
-          // may be coded later, i.e. week 8
-          break;
+					try
+					{
+						// get username input from user
+						cout << "Enter your username: "; // admin's username is Admin
+						cin >> username;
+						cout << endl;
+						
+						// get password input from user
+						cout << "Enter your password: ";
+						cin >> pass;
+						cout << endl;
+						
+						// if the username does not exist, throw exception
+						if(!userList.findUser(userName))
+							throw "Invalid username.";
+						
+						// load user data to validate password
+						currentUser = userList.getUser(userName);
+						
+						// if passwords do not match, throw exception
+						if(!currentUser.validate(pass))
+							throw "Invalid password.";
+						// if the user is admin, go to admin menu
+						else if(currentUser.isAdmin())
+							status = ADMIN;
+						// if the user is a regular user, go to user menu
+						else
+							status = USER;
+					}
+					catch(string str)
+					{
+						// code for handling exceptions
+						cout << "Error: " << str << " Try again." << endl;
+					}
+         break; //end case 1 (Login)
 
-        // REGISTER
+        // REGISTER - Ready for testing
         case 2:
-          cout << "Enter your new username: " << endl;
-          getline(cin, username); //how to differentiate that it is new? - will use a search function to ensure
-                                  // the user does not already exist, to be handled later
-          cout << "Enter your new password: " << endl;
-          getline(cin, pass);
-          // need lines for other
-          // go to user/admin menu
-          break;
+					try
+					{
+						// code for new username
+						cout << "Enter a unique username (no spaces allowed): " << endl;
+						cin >> username;
+						cout << endl;
+						
+						// if user exists, throw exception
+						if(userList.findUser(username))
+							throw "User already exists.";
+						
+						// code to get password for new user
+						cout << "Enter a password (no spaces allowed): ";
+						cin >> pass;
+						cin.get(ch); // gets next character
+						cout << endl;
+						
+						// if the next character was a space, user incorrectly entered
+						// their password, throw exception
+						if(ch == ' ')
+							throw "No spaces allowed in your password.";
+						
+						//set current user data
+						currentUser.setUsername(username);
+						currentUser.setPassword(password);
+						
+						// add current user to database
+						userList.addUser(currentUser);
+						
+						status = USER;
+					}
+					catch(string str)
+					{
+						cout << "Error: " << str << endl;
+					}
+         break; // end case 2 (Register)
 
-        // EXIT
+        // EXIT - Ready for testing
         case 3:
           status = EXIT;
-          break;
+          break; // end case 3 (Exit)
 
         default:
           cout << "Invalid selection." << endl;
       } //end switch
-    }// end while for home menu
+    }// end while loop for home menu
 
+		//***USER MENU***//
     while (status == USER) // loop for user menu
     {
       // code for user menu
@@ -91,9 +156,10 @@ int main()
 					// SEARCH FOR BOOKS
 					// case 1:
 					// input title
-					// search for title
+					// search for title in library
 					// if not present, print relevant message
 					// if present, print book information
+					// break;
 					
 					// BORROW A BOOK
 					// case 2:
@@ -107,7 +173,7 @@ int main()
 						// add username to books borrower queue
 					// else (book does not exist)
 						// output relevant message
-						// maybe - show 
+					// break;
 					
 					// RETURN A BOOK
 					// case 3:
@@ -120,6 +186,7 @@ int main()
 					// pop book borrower queue
 					// while(current borrower has borrowed max books || current borrower username does not exist)
 						// pop borrower queue
+					// break;
 					
 					// VIEW BORROWED BOOKS
 					// case 4:
@@ -193,11 +260,11 @@ int main()
 						// print relevant message (i.e., "book does not exist in library")
 					// break;
 					
-					// UPDATE BOOK INFORMATION
+					// UPDATE BOOK INFORMATION // either change one or prompt for new information
 					// case 3:
 					// prompt for title
 					// if book exists
-						// Output book information
+						// Output book information //
 						// Prompt for which option to edit (I.e., 1 - Title, 2 - Author)
 						// switch(choice)
 						// {
@@ -215,7 +282,10 @@ int main()
 					
 					// ADD/REMOVE USER (ADMINS)
 					// case 5:
-					// 
+					// prompt for new user information
+					// add to newUser
+					// add newUser to the map
+					
 					// LOGOUT
 					// case 6:
 			// }

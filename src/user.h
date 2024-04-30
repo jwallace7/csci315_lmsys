@@ -4,13 +4,26 @@
 #include <iostream>
 #include <string>
 
+// NOTE - Need to overload = operator
+
 class user
 {
 public:
   // GET FUNCTIONS
   int getBookIndex(std::string bookName) const; // Returns the index of bookName in the user's book list.
   // Postcondition: Returns the index of the book in the book array. If it doesn't exist, returns -1.
+	
+  std::string getUsername() const; // Returns the username of the user.
+  // Postcondition: Returns the std::string of the username.
+	
+	// SET FUNCTIONS
+	void setUsername(std::string str); // Sets the username of the user
+	// Postcondition: username = str
+	
+	void setPassword(std::string str); // Sets the password of the user
+	// Postcondition: password = str
 
+	// VALIDATION FUNCTIONS
   bool hasBook(std::string bookName) const; // Checks to see if this user has a book of bookName.
   // Postcondition: Returns true if bookName is in the user's book list, false otherwise.
 
@@ -19,11 +32,11 @@ public:
 
   bool hasMaxBooks() const; // Checks to see if the user has the maximum number of books.
   // Postcondition: Returns true if the user has the maximum number of books, false otherwise.
-
-  std::string getUsername() const; // Returns the username of the user.
-  // Postcondition: Returns the std::string of the username.
-
-  // SET FUNCTIONS
+	
+	bool validate(std::string pass) const; // Checks to see if password is same as user.
+	// Postcondition: Returns true if pass is the same as password.
+	
+	// BOOK FUNCTIONS
 
   void addBook(std::string bookName); // Adds a book to the user's inventory.
   void removeBook(std::string bookName); // Removes a book from the user's inventory if it has the book.
@@ -33,14 +46,20 @@ public:
   void printBooks() const; // Prints out the user's books.
   void printName() const; // Prints the username of the user
 
-  user(std::string name, bool ad); // Basic constructor function.
+  user(std::string name, std::string pass, bool ad); // Basic constructor function.
 
 private:
   bool admin; // Whether or not the user is an admin.
+	std::string password;
   std::string username; // Username of the user.
   std::string books[5]; // String array of books the user owns.
   int bookCount = 0; // Count of how many users the book has.
 };
+
+// GET FUNCTIONS
+
+std::string user::getUsername() const
+{ return username; }//end getUsername
 
 int user::getBookIndex(std::string bookName) const {
   for (int i = 0; i < 5; i++)
@@ -49,6 +68,16 @@ int user::getBookIndex(std::string bookName) const {
 
   return -1;
 }//end getBookIndex
+
+// SET FUNCTIONS
+
+void setUsername(std::string str)
+{ username = str; }//end setUsername
+
+void setPassword(std::string str)
+{ password = str; }//end setPassword
+
+// VALIDATION FUNCTIONS
 
 bool user::hasBook(std::string bookName) const 
 { return (getBookIndex(bookName) != -1); }//end hasBook
@@ -59,8 +88,8 @@ bool user::isAdmin() const
 bool user::hasMaxBooks() const
 { return bookCount == 5; }//end hasMaxBooks
 
-std::string user::getUsername() const
-{ return username; }//end getUsername
+std::string user::validate(std::string pass) const
+{ return pass == password; }//end validate
 
 void user::addBook(std::string bookName) {
   if (!hasBook(bookName)) // If the user doesn't have the book already
@@ -98,8 +127,9 @@ void user::printName() const {
   std::cout << username << std::endl;
 }//end printName
 
-user::user(std::string name, bool ad) {
+user::user(std::string name, std::string pass, bool ad) {
   username = name;
+	password = pass;
   admin = ad;
 }//end constructor
 

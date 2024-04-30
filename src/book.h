@@ -15,10 +15,16 @@ public:
   bool operator==(const book &) const;
   // Equality operator. Used for sorting.
   // Postcondition: Returns true if the titles are the same.
+  bool operator!=(const book &) const;
+  // Inequality operator. Used for sorting.
+  // Postcondition: Returns true if the titles are not the same.
   bool operator>=(const book &) const;
   // Greater than or equal to operator. Used for sorting.
   // Postcondition: Returns true if the title of this book is greater than or
   // equal to the other book.
+  bool operator>(const book &) const;
+  // Greater than operator. Used for sorting.
+  // Postcondition: Returns true if the title of this book is greater than the other book. 
 
   // SET FUNCTIONS
   void setTitle(std::string t);           // Function to set title
@@ -42,8 +48,9 @@ public:
   // PRINT FUNCTIONS
   void printTitle() const; // Function to print book title *use for selection
                            // options in search*
-  void
-  printInfo() const; // *Alyssa* Function to print book information to console
+  void printQueue(ofstream& outFile) const; // Function to print the book's full queue
+
+  void printInfo() const; // *Alyssa* Function to print book information to console
   void printInfo(ofstream outFile)
       const; // *Alyssa* Function to print book information to an output file
 
@@ -81,9 +88,17 @@ bool book::operator==(const book &otherBook) const {
   return (title == otherBook.getTitle());
 } // end equality operator
 
+bool book::operator!=(const book &otherBook) const {
+  return (title != otherBook.getTitle());
+} // end inequality operator
+
 bool book::operator>=(const book &otherBook) const {
   return (title >= otherBook.getTitle());
 } // end gtoe operator
+
+bool book::operator>(const book &otherBook) const {
+  return (title > otherBook.getTitle());
+} // end gt operator
 
 // SET FUNCTIONS
 
@@ -130,6 +145,12 @@ std::string book::currentBorrower() const
 // PRINT FUNCTIONS
 void book::printTitle() const
 { cout << title << endl; } // end printTitle
+
+void book::printQueue(ofstream &outFile) const
+{
+    linkedQueueType<std::string> tempQueue = borrowerQueue;
+
+}
 
 // CONSTRUCTOR
 

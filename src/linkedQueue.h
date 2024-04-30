@@ -80,6 +80,11 @@ private:
                                 //the queue
     nodeType<Type> *queueRear;  //pointer to the rear of 
                                 //the queue
+    void copyQueue(const linkedQueueType<Type>& otherQueue);
+    // Private function to copy the queue into another queue
+
+    void recursiveClone(const linkedQueueType<Type>& otherQueue, nodeType<Type> *current);
+    // Private recursive function to copy an element from another queue
 };
 
     //Default constructor
@@ -184,15 +189,14 @@ void linkedQueueType<Type>::deleteQueue()
 template <class Type>
 linkedQueueType<Type>::~linkedQueueType() 
 {
-    //Write the definition of the destructor
+    initializeQueue();
 } //end destructor
 
 template <class Type>
 const linkedQueueType<Type>& linkedQueueType<Type>::operator=
                     (const linkedQueueType<Type>& otherQueue)
 {
-    //Write the definition of to overload the assignment operator
-
+    copyQueue(otherQueue);
 } //end assignment operator
 
   //copy constructor
@@ -200,7 +204,34 @@ template <class Type>
 linkedQueueType<Type>::linkedQueueType
                  (const linkedQueueType<Type>& otherQueue) 
 {
-    //Write the definition of the copy constructor
+    copyQueue(otherQueue);
 }//end copy constructor
+
+// copy function
+template <class Type>
+void linkedQueueType<Type>::copyQueue(const linkedQueueType<Type>& otherQueue)
+{
+    nodeType<Type> *current;
+
+    if (isEmptyQueue() == false) // If the queue is not empty, initialize it and make it empty
+      initializeQueue();
+
+    if (otherQueue.isEmptyQueue() == false) // If the other queue is not empty,
+    {
+      current = otherQueue.queueFront; // Set current to the front of the other queue
+
+      recursiveClone(otherQueue, current);
+    }
+}//end copy function
+
+template <class Type>
+void linkedQueueType<Type>::recursiveClone(const linkedQueueType<Type>& otherQueue, nodeType<Type> *current)
+{
+    if (current != nullptr)
+    {
+        recursiveClone(otherQueue, current->link);
+        addQueue(current->info);
+    }
+}//end recursive clone function
 
 #endif

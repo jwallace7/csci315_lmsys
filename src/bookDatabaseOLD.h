@@ -1,5 +1,5 @@
-#ifndef BOOKDATABASE_H
-#define BOOKDATABASE_H
+#ifndef BOOKDATABASEOLD_H
+#define BOOKDATABASEOLD_H
 
 #include <iostream>
 #include <string.h>

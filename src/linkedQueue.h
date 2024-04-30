@@ -10,12 +10,15 @@
 using namespace std;
 
 //Definition of the node
+#ifndef nodeTypeDef
+#define nodeTypeDef
 template <class Type>
-struct nodeType 
+struct nodeType
 {
-    Type info;
-    nodeType<Type> *link;
+  Type info;
+  nodeType<Type> *link;
 };
+#endif
 
 
 template <class Type>
@@ -192,12 +195,22 @@ linkedQueueType<Type>::~linkedQueueType()
     initializeQueue();
 } //end destructor
 
+
 template <class Type>
 const linkedQueueType<Type>& linkedQueueType<Type>::operator=
                     (const linkedQueueType<Type>& otherQueue)
 {
-    copyQueue(otherQueue);
+    linkedQueueType<Type>* temp = new linkedQueueType<Type>;
+  
+    if (this != &otherQueue) //avoid self-copy
+    {
+      temp->copyQueue(otherQueue);
+      return *temp;
+    }
+    else
+      return *this;
 } //end assignment operator
+
 
   //copy constructor
 template <class Type>
@@ -213,13 +226,13 @@ void linkedQueueType<Type>::copyQueue(const linkedQueueType<Type>& otherQueue)
 {
     nodeType<Type> *current;
 
-    if (isEmptyQueue() == false) // If the queue is not empty, initialize it and make it empty
+    // if the queue to copy from is empty, initialize queue
+    if (otherQueue.isEmptyQueue())
       initializeQueue();
-
-    if (otherQueue.isEmptyQueue() == false) // If the other queue is not empty,
+    // If the other queue is not empty, then copy queue
+    else
     {
       current = otherQueue.queueFront; // Set current to the front of the other queue
-
       recursiveClone(otherQueue, current);
     }
 }//end copy function

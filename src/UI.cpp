@@ -13,23 +13,18 @@ void displayPreMenu();
 void displayMenuUser();
 void displayMenuAdmin();
 
-// 4-30-24
-// Note to Samantha:
-// I've worked to get the home menu to a test-ready state.
-// Please work on options 1, 4 and 6 for the user menu.
-
 int main()
 {
   int choice;
   char ch;
-  string username;
-  string pass;
+  string username, pass, tempTitle, tempAuth;
+	double tempCatNum;
   bookDatabase library; // database with all books in the library
   systemStatus status = HOME;
 	userDatabase userList;
   user currentUser("", "", false); // will be the current loaded user in the system
-	book* tempBook; //will be a temp book, for adding a book to the system
-	user* newUser; // used for adding a new user to the database
+	book tempBook; //will be a temp book, for adding a book to the system
+	user newUser; // used for adding a new user to the database
   // eventually create a user database of some kind
 
   // code to load data from booko database file into library
@@ -145,24 +140,27 @@ int main()
 		//***USER MENU***//
     while (status == USER) // loop for user menu
     {
-      // code for user menu
-
       // print user menu
-      // input user selection
-      // process selection (below)
+			displayUserMenu();
 			
-			// switch(choice)
-			//{
-					// SEARCH FOR BOOKS
-					// case 1:
+      // get user selection
+      cin >> choice;
+      cin.get(ch);
+      cout << endl;
+			
+      // process selection
+			switch(choice)
+			{
+					//SEARCH FOR BOOKS
+					case 1:
 					// input title
 					// search for title in library
 					// if not present, print relevant message
 					// if present, print book information
-					// break;
+					break;
 					
-					// BORROW A BOOK
-					// case 2:
+					//BORROW A BOOK
+					case 2:
 					// input title
 					// if(book exists)
 						// if(book is available)
@@ -173,10 +171,10 @@ int main()
 						// add username to books borrower queue
 					// else (book does not exist)
 						// output relevant message
-					// break;
+					break;
 					
-					// RETURN A BOOK
-					// case 3:
+					//RETURN A BOOK
+					case 3:
 					// print the titles of user's current loans, I.e.:
 						// 1. Jack and the Beanstalk
 						// 2. Little Women
@@ -186,15 +184,16 @@ int main()
 					// pop book borrower queue
 					// while(current borrower has borrowed max books || current borrower username does not exist)
 						// pop borrower queue
-					// break;
+					break;
 					
-					// VIEW BORROWED BOOKS
-					// case 4:
+					//VIEW BORROWED BOOKS
+					case 4:
 					// code to print users borrowed books
 					// maybe - option to return to menu? this way user can view list as long as they wish
+					break;
 					
-					// UPDATE PROFILE - Can reuse a lot of code between here and REGISTER
-					// case 5:
+					//UPDATE PROFILE - Can reuse a lot of code between here and REGISTER
+					case 5:
 						// print options for what the user can change (password, name, age, etc.)
 						// get user choice
 						// switch(choice)
@@ -208,14 +207,17 @@ int main()
 									// ...
 									// default:
 						// }
+					break;
 					
-					// LOGOUT
-					// case 6:
-					// cout << "You have been successfully logged out.\n";
-					// status = HOME; // set status to HOME to return to home menu
+					// LOGOUT - Ready for testing
+					case 6:
+						cout << "You have been successfully logged out.\n";
+						status = HOME; // set status to HOME to return to home menu
+					break;
 					
-					// default:	
-			//}
+					default:
+						cout << "Invalid selection." << endl;
+			}
     }// end while for user menu
 
     while (status == ADMIN) // loop for admin menu
@@ -223,13 +225,18 @@ int main()
       // code for admin menu
 
       // print admin menu
-      // input user selection
-      // process selection
+			displayMenuAdmin();
 			
-			// switch(choice)
-			// {
-					// ADD A BOOK
-					// case 1:
+      // get user selection
+      cin >> choice;
+      cin.get(ch);
+      cout << endl;
+			
+      // process selection
+			switch(choice)
+			{
+				// ADD A BOOK
+				case 1:
 					// Prompt for title
 					// Input title
 					// if (book already exists)
@@ -246,22 +253,58 @@ int main()
 					// input catalog number
 					// update tempBook
 					// add tempBook to library
-					// break;
+				break;
 					
-					// REMOVE A BOOK
-					// case 2:
+				// REMOVE A BOOK - ready for Testing, except completion of printInfo()
+				case 2:
 					// Prompt for title
-					// If book exists
-						// print book information
-						// ask user for confirmation
-						// if user confirms
-							// delete book
-					// else
-						// print relevant message (i.e., "book does not exist in library")
-					// break;
+					cout << "Input the title of the book you want to remove: ";
+					cin >> tempTitle;
+					cout << endl;
 					
-					// UPDATE BOOK INFORMATION // either change one or prompt for new information
-					// case 3:
+					// get book, if book exists
+					tempBook = library.getBookFromTitle(tempTitle);
+					// due to the way getBookFromTitle is written,
+					// if the book does not exist the book returned
+					// will be empty
+					
+					// if the titles match, the book exists
+					if(tempBook.getTitle() == tempTitle)
+					{
+						// print information to console
+						cout << "\n-----     BOOK INFO     -----";
+						tempBook.printInfo();
+						cout << "-----------------------------" << endl;
+						
+						// ask user for confirmation and get user input
+						cout << "\nAre you sure you want to remove the book?";
+						cout << "\nEnter Y to confirm, N to deny: ";
+						cin.get(ch);
+						cout << endl;
+						
+						switch(ch)
+						{
+							// admin confirms, delete book
+							case 'y':
+							case 'Y':
+								library.deleteNode(tempBook);
+								cout << "Book deleted. Returning to menu." << endl;
+							break;
+							
+							// admin denies, do nothing
+							case 'n':
+							case 'N':
+								cout << "Returning to menu." << endl;
+							break;
+							
+							default:
+								cout << "Invalid input. Returning to menu." << endl;
+						}
+					}
+				break; // end case 2 (Remove A Book)
+					
+				// UPDATE BOOK INFORMATION // either change one or prompt for new information
+				case 3:
 					// prompt for title
 					// if book exists
 						// Output book information //
@@ -273,22 +316,31 @@ int main()
 							// DATE PUBLISHED
 							// CATALOG NUMBER
 						// }
-						// break;
+				break; // end case 3 (Update Book Information)
 						
-					// VIEW ALL LOANS
-					// case 4:
+				// VIEW ALL LOANS
+				case 4:
 					// iterate through binary search tree (maybe develop as function in BST class? - Trenten/Jonathan)
 					// if book is on loan, print
-					
-					// ADD/REMOVE USER (ADMINS)
-					// case 5:
+				break; // end case 4 (View All Loans)
+				
+				// ADD/REMOVE USER
+				case 5:
 					// prompt for new user information
 					// add to newUser
 					// add newUser to the map
-					
-					// LOGOUT
-					// case 6:
-			// }
+				break;
+				// end case 5 (Add/Remove User)
+				
+				// LOGOUT - Ready for testing
+				case 6:
+						cout << "You have been successfully logged out.\n";
+						status = HOME; // set status to HOME to return to home menu
+				break; // end case 6 (Logout)
+				
+				default:
+					cout << "Invalid selection." << endl;
+			}
       // set status to...
           // HOME to return to the home menu
           // EXIT to exit the program

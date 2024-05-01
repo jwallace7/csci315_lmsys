@@ -200,15 +200,10 @@ template <class Type>
 const linkedQueueType<Type>& linkedQueueType<Type>::operator=
                     (const linkedQueueType<Type>& otherQueue)
 {
-    linkedQueueType<Type>* temp = new linkedQueueType<Type>;
-  
     if (this != &otherQueue) //avoid self-copy
-    {
-      temp->copyQueue(otherQueue);
-      return *temp;
-    }
-    else
-      return *this;
+      copyQueue(otherQueue);
+			
+    return *this;
 } //end assignment operator
 
 
@@ -226,11 +221,9 @@ void linkedQueueType<Type>::copyQueue(const linkedQueueType<Type>& otherQueue)
 {
     nodeType<Type> *current;
 
-    // if the queue to copy from is empty, initialize queue
-    if (otherQueue.isEmptyQueue())
-      initializeQueue();
+    initializeQueue();
     // If the other queue is not empty, then copy queue
-    else
+    if(!otherQueue.isEmptyQueue())
     {
       current = otherQueue.queueFront; // Set current to the front of the other queue
       recursiveClone(otherQueue, current);

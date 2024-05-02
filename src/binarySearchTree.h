@@ -36,7 +36,7 @@ public:
       //               message is printed.
 
 private:
-    void deleteFromTree(nodeType<elemType>* &p);
+    void deleteFromTree(binaryNodeType<elemType>* &p);
       //Function to delete the node to which p points is 
       //deleted from the binary search tree.
       //Postcondition: The node to which p points is deleted
@@ -48,7 +48,7 @@ template <class elemType>
 bool bSearchTreeType<elemType>::search
                     (const elemType& searchItem) const
 {
-    nodeType<elemType> *current;
+    binaryNodeType<elemType> *current;
     bool found = false;
 
     if (root == nullptr)
@@ -75,12 +75,12 @@ template <class elemType>
 void bSearchTreeType<elemType>::insert
                  (const elemType& insertItem)
 {
-    nodeType<elemType> *current; //pointer to traverse the tree
-    nodeType<elemType> *trailCurrent = nullptr; //pointer 
+    binaryNodeType<elemType> *current; //pointer to traverse the tree
+    binaryNodeType<elemType> *trailCurrent = nullptr; //pointer 
                                               //behind current
-    nodeType<elemType> *newNode;  //pointer to create the node
+    binaryNodeType<elemType> *newNode;  //pointer to create the node
 
-    newNode = new nodeType<elemType>;
+    newNode = new binaryNodeType<elemType>;
     newNode->info = insertItem;
     newNode->lLink = nullptr;
     newNode->rLink = nullptr;
@@ -119,8 +119,8 @@ template <class elemType>
 void bSearchTreeType<elemType>::deleteNode
                                 (const elemType& deleteItem)
 {
-    nodeType<elemType> *current; //pointer to traverse the tree
-    nodeType<elemType> *trailCurrent; //pointer behind current
+    binaryNodeType<elemType> *current; //pointer to traverse the tree
+    binaryNodeType<elemType> *trailCurrent; //pointer behind current
     bool found = false;
 
     if (root == nullptr)
@@ -166,11 +166,11 @@ void bSearchTreeType<elemType>::deleteNode
 
 template <class elemType>
 void bSearchTreeType<elemType>::deleteFromTree
-                                 (nodeType<elemType>* &p)
+                                 (binaryNodeType<elemType>* &p)
 {
-    nodeType<elemType> *current; //pointer to traverse the tree
-    nodeType<elemType> *trailCurrent;  //pointer behind current
-    nodeType<elemType> *temp;      //pointer to delete the node
+    binaryNodeType<elemType> *current; //pointer to traverse the tree
+    binaryNodeType<elemType> *trailCurrent;  //pointer behind current
+    binaryNodeType<elemType> *temp;      //pointer to delete the node
 
     if (p == nullptr)
         cout << "Error: The node to be deleted does not exist."

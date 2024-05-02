@@ -25,7 +25,7 @@ public:
   bool operator>(const book &) const;
   // Greater than operator. Used for sorting.
   // Postcondition: Returns true if the title of this book is greater than the other book.
-  friend istream& operator>>(istream&, book&);
+  friend ifstream& operator>> (ifstream& isObject, book& inFile);
   // Insertion stream operator. Used for creating a new book.
 
   // SET FUNCTIONS
@@ -101,6 +101,31 @@ bool book::operator>(const book &otherBook) const {
   return (title > otherBook.getTitle());
 } // end gt operator
 
+ifstream& operator>>(ifstream& inFile, book& newBook)
+{
+  std::string line; // String variable for lines that need to be
+                    // converted to numbers
+  std::string borrower; // String variable for borrower
+
+  std::getline(inFile, newBook.title); // Read a line for title and author
+  std::getline(inFile, newBook.author);
+  
+  std::getline(inFile, line); // Read a line for the year
+  newBook.datePublished = std::stoi(line);
+
+  std::getline(inFile, line); // Read a line for the catalog number
+  newBook.catalogNumber = std::stod(line);
+
+  inFile >> borrower; // Iterate through the borrowers until it reaches a "0" string
+  while (borrower != "0") {
+      newBook.addBorrower(borrower);
+      inFile >> borrower;
+  }//end while
+  inFile.ignore(999, '\n'); // Ignore until the next line
+
+  return inFile;
+} // end insertion operator
+
 // SET FUNCTIONS
 
 void book::setTitle(std::string t) { title = t; } // end setTitle
@@ -149,9 +174,8 @@ void book::printTitle() const
 
 void book::printQueue(ofstream &outFile) const
 { 
-  if (borrowerQueue.isEmptyQueue()) // If the borrower queue is empty, print the title is empty
-    outFile << "0" << endl;
-  else { // Else, create a temporary queue and iterate through it to print out the queue
+  if (!borrowerQueue.isEmptyQueue()) // If the borrower queue is not empty 
+  { // Create a temporary queue and iterate through it to print out the queue
     linkedQueueType<std::string> tempQueue = borrowerQueue;
 
     outFile << tempQueue.front();
@@ -163,7 +187,8 @@ void book::printQueue(ofstream &outFile) const
     }//end while
 
     outFile << " 0";
-  }//end if
+  } else
+    outFile << "0";
 }//end printQueue function
 
 void book::printInfo(ofstream &outFile) const

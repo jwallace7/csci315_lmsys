@@ -3,12 +3,20 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 // NOTE - Need to overload = operator
 
 class user
 {
 public:
+  // OPERATOR OVERLOADING
+  const user &operator=(const user& otherUser); // Copies the user to another user
+  bool operator==(const user &) const;
+  // Equality operator. Used for sorting.
+  // Postcondition: Returns true if the usernames are the same.
+  friend std::ifstream& operator>> (std::ifstream& inFile, user& newUser);
+  // Insertion stream operator. Used for creating a new user.
   // GET FUNCTIONS
   int getBookIndex(std::string bookName) const; // Returns the index of bookName in the user's book list.
   // Postcondition: Returns the index of the book in the book array. If it doesn't exist, returns -1.
@@ -45,8 +53,10 @@ public:
 
   void printBooks() const; // Prints out the user's books.
   void printName() const; // Prints the username of the user
+  void printInfo(std::ofstream& outFile); // Prints the user's data to a file.
 
-  user(std::string name, std::string pass, bool ad); // Basic constructor function.
+  user(std::string name = "", std::string pass = "", bool ad = false); // Basic constructor function.
+  user(const user& otherUser); // Copy constructor.
 
 private:
   bool admin; // Whether or not the user is an admin.
@@ -54,7 +64,43 @@ private:
   std::string username; // Username of the user.
   std::string books[5]; // String array of books the user owns.
   int bookCount = 0; // Count of how many users the book has.
+
+  void copyUser(const user& otherUser); // Private function for copying users.
 };
+
+// OPERATOR OVERLOADING
+
+const user& user::operator=(const user& otherUser) {
+    if (this != &otherUser)
+      copyUser(otherUser);
+    
+    return *this;
+}//end assignment operator
+
+bool user::operator==(const user& otherUser) const {
+    return otherUser.getUsername() == username;
+}//end equality operator
+
+std::ifstream& operator>>(std::ifstream& inFile, user& newUser)
+{
+    char adminValue; // Character to read the admin value
+    std::string line; // String value to read lines
+
+    inFile >> newUser.username >> newUser.password >> adminValue; // Get username, password, and admin value
+    std::cout << adminValue << std::endl;
+    newUser.admin = (adminValue == '1'); // Convert admin value to a boolean variable based on the given character
+
+    inFile.ignore(999, '\n'); // Ignore until the next line
+
+    // Iterate through the book lines until a zero is reached
+    std::getline(inFile, line);
+    while (line != "0") {
+        newUser.addBook(line);
+        std::getline(inFile, line);
+    }//end while
+
+    return inFile;
+}//end insertion operator
 
 // GET FUNCTIONS
 
@@ -71,10 +117,10 @@ int user::getBookIndex(std::string bookName) const {
 
 // SET FUNCTIONS
 
-void setUsername(std::string str)
+void user::setUsername(std::string str)
 { username = str; }//end setUsername
 
-void setPassword(std::string str)
+void user::setPassword(std::string str)
 { password = str; }//end setPassword
 
 // VALIDATION FUNCTIONS
@@ -88,7 +134,7 @@ bool user::isAdmin() const
 bool user::hasMaxBooks() const
 { return bookCount == 5; }//end hasMaxBooks
 
-std::string user::validate(std::string pass) const
+bool user::validate(std::string pass) const
 { return pass == password; }//end validate
 
 void user::addBook(std::string bookName) {
@@ -127,10 +173,39 @@ void user::printName() const {
   std::cout << username << std::endl;
 }//end printName
 
+void user::printInfo(std::ofstream& outFile) {
+  // Print out basic information such as user, password, and whether or not they're an admin
+  // on the first line
+  outFile << username << " " << password << " " << admin << std::endl;
+
+  // Print out books on the following line
+  for (int i = 0; i < 5; i++)
+    if (books[i] != "")
+      outFile << books[i] << std::endl;
+
+  // End with a zero to indicate book reading is finished
+  outFile << "0";
+}
+
 user::user(std::string name, std::string pass, bool ad) {
   username = name;
 	password = pass;
   admin = ad;
 }//end constructor
+
+user::user(const user& otherUser) {
+    copyUser(otherUser);
+}//end copy constructor
+
+void user::copyUser(const user& otherUser)
+{
+  username = otherUser.username; // Copy the user's username, password, and admin
+  password = otherUser.password;
+  admin = otherUser.admin;
+
+  for (int i = 0; i < 5; i++)
+    if (otherUser.books[i] != "")
+      addBook(otherUser.books[i]);
+}//end copy function
 
 #endif

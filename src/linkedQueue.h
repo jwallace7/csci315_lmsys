@@ -85,9 +85,6 @@ private:
                                 //the queue
     void copyQueue(const linkedQueueType<Type>& otherQueue);
     // Private function to copy the queue into another queue
-
-    void recursiveClone(const linkedQueueType<Type>& otherQueue, nodeType<Type> *current);
-    // Private recursive function to copy an element from another queue
 };
 
     //Default constructor
@@ -221,23 +218,24 @@ void linkedQueueType<Type>::copyQueue(const linkedQueueType<Type>& otherQueue)
 {
     nodeType<Type> *current;
 
-    initializeQueue();
-    // If the other queue is not empty, then copy queue
-    if(!otherQueue.isEmptyQueue())
-    {
-      current = otherQueue.queueFront; // Set current to the front of the other queue
-      recursiveClone(otherQueue, current);
-    }
-}//end copy function
+    queueFront = nullptr;
+    queueRear = nullptr;
 
-template <class Type>
-void linkedQueueType<Type>::recursiveClone(const linkedQueueType<Type>& otherQueue, nodeType<Type> *current)
-{
-    if (current != nullptr)
+    if (isEmptyQueue() == false) // If the queue is not empty, initialize it and make it empty
+      initializeQueue();
+
+    if (otherQueue.queueFront != nullptr) // If the other queue is not empty,
     {
-        recursiveClone(otherQueue, current->link);
-        addQueue(current->info);
-    }
-}//end recursive clone function
+      current = otherQueue.queueFront; // Set the current to the queue front
+
+      addQueue(current->info); // Add the first of the other queue to the new queue
+
+      while (current->link != nullptr) // Iterate through this until we go through the whole queue
+      {
+          current = current->link;
+          addQueue(current->info);
+      }//end while
+    }//end if
+}//end copy function
 
 #endif

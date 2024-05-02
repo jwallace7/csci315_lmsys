@@ -48,12 +48,11 @@ public:
   void removeBorrower(); // Function to remove the first borrower from the queue
 
   // PRINT FUNCTIONS
-  void printTitle() const; // Function to print book title *use for selection
-                           // options in search*
+  void printTitle() const; // Function to print book title
   void printQueue(ofstream& outFile) const; // Function to print the book's full queue
 
-  void printInfo() const; // *Alyssa* Function to print book information to console
-  void printInfo(ofstream& outFile) const; // *Alyssa* Function to print book information to an output file
+  void printInfo() const; // Function to print book information to console
+  void printInfo(ofstream& outFile) const; // Function to print book information to an output file
 
   // Constructor. Borrower always starts off as an empty string, and the book
   // always starts off as not borrowed
@@ -190,6 +189,12 @@ void book::printQueue(ofstream &outFile) const
   } else
     outFile << "0";
 }//end printQueue function
+
+void book::printInfo() const
+{
+	cout << title << endl << author << endl << datePublished << endl
+			 << catalogNumber << endl;
+}
 
 void book::printInfo(ofstream &outFile) const
 {

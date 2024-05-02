@@ -15,9 +15,9 @@ void displayMenuAdmin();
 
 int main()
 {
-  int choice;
+  int choice, flag, tempDate;
   char ch;
-  string username, pass, newPass, tempTitle, tempAuth, newBorrower;
+  string username, pass, newUsername, newPass, tempTitle, tempAuth, newBorrower;
 	double tempCatNum;
   bookDatabase library; // database with all books in the library
   systemStatus status = HOME;
@@ -27,8 +27,8 @@ int main()
 	user newUser; // used for adding a new user to the database
   // eventually create a user database of some kind
 
-  // code to load data from booko database file into library
-	// code to load data from user database file into userList
+  library.loadFromFile(); // load data from book database file into library
+	userList.loadFromFile(); // load data from user database file into userList
 
   while (status != EXIT) // while user does not exit, continue looping
   {
@@ -156,10 +156,27 @@ int main()
 					
 					//SEARCH FOR BOOKS
 					case 1:
-					// input title
-					// search for title in library
-					// if not present, print relevant message
-					// if present, print book information
+						// input title
+						cout << "Enter the title of the book to search for: ";
+						cin.getline(tempTitle);
+						cout << endl;
+						
+						// search for title in library
+						tempBook = library.getBookFromTitle(tempTitle);
+						if (tempTitle == tempBook.getTitle())
+						{
+							// book exists, print out book information
+							cout << "This book exists in the library." << endl;
+							cout << "-----     BOOK INFO     -----";
+							tempBook.printInfo();
+							cout << "-----------------------------" << endl;
+						}
+						else
+						{
+							// book does not exist, print relevant message
+							cout << "The book does not exist in the library. ";
+						}
+						cout << "Returning to user menu." << endl;
 					break;
 					
 					//BORROW A BOOK - Ready for testing
@@ -216,10 +233,12 @@ int main()
 						// pop borrower queue
 					break;
 					
-					//VIEW BORROWED BOOKS
+					//VIEW BORROWED BOOKS - Ready for testing
 					case 4:
-					// code to print users borrowed books
-					// maybe - option to return to menu? this way user can view list as long as they wish
+						// code to print users borrowed books
+						cout << "Here are the books you have currently borrowed:" << endl;
+						currentUser.printBooks();
+						cout << "Returning to user menu." << endl;
 					break;
 					
 					//RESET PASSWORD - Ready for testing
@@ -266,27 +285,51 @@ int main()
       // process selection
 			switch(choice)
 			{
-				// ADD A BOOK
+				// ADD A BOOK - Ready for testing
 				case 1:
 					// Prompt for title
-					// Input title
-					// if (book already exists)
-						// output relevant message
-						// 
-					// update tempBook
-					// Prompt for author
-					// Input author
-					// Update tempBook
-					// Prompt for date published
-					// Input date published
-					// Update tempBook
-					// prompt for catalog number
-					// input catalog number
-					// update tempBook
-					// add tempBook to library
+					cout << "Enter the title of the book you want to add: ";
+					cin.getline(tempTitle);
+					cout << endl;
+					
+					// check to see if book already exists
+					tempBook = library.getBookFromTitle(tempTitle);
+					if (tempTitle == tempBook.getTitle())
+					{
+						// book exists, output relevant message
+						cout << "The book already exists in the library. Returning to administrator menu." << endl;
+						break;
+					}
+					else
+					{
+						// prompt for author
+						cout << "Enter the name of the author: ";
+						cin.getline(tempAuth);
+						cout << endl;
+					
+						// prompt for date published
+						cout << "Enter the date it was published: ";
+						cin >> tempDate;
+						cout << endl;
+						
+						// prompt for catalog number
+						cout << "Enter the catalog number of the book: ";
+						cin >> tempCatNum;
+						cout << endl;
+						
+						// update tempBook
+						tempBook.setTitle(tempTitle);
+						tempBook.setAuthor(tempAuth);
+						tempBook.setDate(tempDate);
+						tempBook.setCatalogNumber(tempCatNum);
+						
+						// add tempBook to library
+						library.addBook(tempBook);
+						cout << "Book added to library. Returning to administrator menu." << endl;
+					}
 				break;
 					
-				// REMOVE A BOOK - ready for Testing, except completion of printInfo()
+				// REMOVE A BOOK - ready for Testing
 				case 2:
 					// Prompt for title
 					cout << "Input the title of the book you want to remove: ";
@@ -355,11 +398,47 @@ int main()
 				break;
 				// end case 4 (View All Loans)
 				
-				// ADD/REMOVE USER
+				// ADD/REMOVE USER - Ready for testing
 				case 5:
-					// prompt for new user information
-					// add to newUser
-					// add newUser to the map
+					// prompt for username
+						cout << "Enter the username of the user you wish to add or delete: ";
+						cout << "Please enter the new user's username: ";
+						cin >> newUsername;
+						cout << endl;
+						if(library.findUser(newUsername));
+						{
+							// remove user and notify Admin
+							userList.removeUser(newUsername));
+							cout << "User deleted. Returning to administrator menu." << endl;
+						}
+						else
+						{
+							// prompt for new user's password
+							cout << "Please enter the new user's password: ";
+							cin >> newPass;
+							cout << endl;
+							
+							cout << "Is the user a\n"
+									 << "0 - Regular user, or\n"
+									 << "1 - Administrator\n"
+									 << "Enter the corresponding number: ";
+							cin >> flag;
+							cout << endl;	
+							
+							// initialize newUser
+							newUser.setUsername(newUsername);
+							newUser.setPassword(newPass);
+							if(flag == 1)
+								newUser.setAdmin();
+							else
+								newUser.setAdmin(false);
+							
+							// add newUser to the map
+							userList.addUser(newUser);
+							
+							// notify admin
+							cout << "User added. Returning to administrator menu." << endl;
+						}
 				break;
 				// end case 5 (Add/Remove User)
 				
@@ -376,8 +455,9 @@ int main()
     }// end while for admin menu
 
   }// end while for UI
-
-    //code to save data from library to the data file
+		
+		library.saveToFile(); // save data from library to the data file
+		userList.saveToFile(); // save data from user map to the data file
 }
 
 // FUNCTION DEFINITIONS //

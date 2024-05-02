@@ -30,6 +30,9 @@ public:
 	
 	void setPassword(std::string str); // Sets the password of the user
 	// Postcondition: password = str
+	
+	void setAdmin(bool ad = true); // Sets admin status of the user
+	// Postcondition: admin = ad;
 
 	// VALIDATION FUNCTIONS
   bool hasBook(std::string bookName) const; // Checks to see if this user has a book of bookName.
@@ -122,6 +125,9 @@ void user::setUsername(std::string str)
 
 void user::setPassword(std::string str)
 { password = str; }//end setPassword
+
+void setAdmin(bool ad)
+{ admin = ad; }// end setAdmin
 
 // VALIDATION FUNCTIONS
 

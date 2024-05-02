@@ -20,6 +20,13 @@ public:
 
     // LOAN FUNCTIONS
     void printAllLoans() const;
+		
+		// BORROW/RETURN FUNCTIONS
+		void borrow(std::string title, std::string user);
+		// Function that adds a user to the borrower queue of a book
+		// in the database.
+		// Postcondition: If the book exists, then user is added
+		// to the borrower queue of the book.
 
     // DATA MANAGEMENT FUNCTIONS
     void saveToFile(std::string fileName = defaultFile);
@@ -74,6 +81,27 @@ void bookDatabase::printLoan(binaryNodeType<book> *b) const {
         printLoan(b->rLink);
     }
 }//end printLoan
+
+// BORROW/RETURN FUNCTIONS
+void bookDatabase::borrow(std::string title, std::string user)
+{
+	binaryNodeType<book> *current; // Declare a node type of book.
+	if (root == nullptr)
+        cout << "Cannot borrow from an empty library." << endl;
+  else
+  { 
+    current = root;
+      while (current != nullptr)
+      {
+          if ((current->info).getTitle() == title)
+            current->addBorrower(user); // Return the book if its found.
+          else if ((current->info).getTitle() > title)
+            current = current->lLink; // If not, move to the next node.
+          else
+            current = current->rLink;
+        }//end while
+		}
+}
 
 // SAVE FUNCTIONS
 void bookDatabase::saveToFile(std::string fileName) {

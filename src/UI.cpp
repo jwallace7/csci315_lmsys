@@ -17,7 +17,7 @@ int main()
 {
   int choice;
   char ch;
-  string username, pass, tempTitle, tempAuth;
+  string username, pass, tempTitle, tempAuth, newBorrower;
 	double tempCatNum;
   bookDatabase library; // database with all books in the library
   systemStatus status = HOME;
@@ -150,7 +150,10 @@ int main()
 			
       // process selection
 			switch(choice)
-			{
+			{		
+					//reinitializing certain variables
+					tempTitle = "";
+					
 					//SEARCH FOR BOOKS
 					case 1:
 					// input title
@@ -159,18 +162,45 @@ int main()
 					// if present, print book information
 					break;
 					
-					//BORROW A BOOK
+					//BORROW A BOOK - Ready for testing
 					case 2:
-					// input title
-					// if(book exists)
-						// if(book is available)
-							// add to user's book list
-							// output relevant message, also indicate number of books left
-						// else(book is currently borrowed)
-							// output relevant message saying the book is on hold for them
-						// add username to books borrower queue
-					// else (book does not exist)
-						// output relevant message
+						if(!currentUser.hasMaxBooks())
+						{
+							// input title
+							cout << "Input the title of the book you want to borrow: ";
+							cin >> tempTitle;
+							cout << endl;
+							
+							// get book, if book exists
+							tempBook = library.getBookFromTitle(tempTitle);
+							
+							// if the book exists, tempTitle will equal tempBook.getTitle()
+							if(tempTitle == tempBook.getTitle())
+							{
+								if(!tempBook.isBorrowed()) // book is not currently borrowed
+								{
+									// add to user's book list
+									currentUser.addBook(tempTitle);
+									// output relevant message
+									cout << "Book borrowed. Returning to user menu." << endl;
+								}
+								else // book is currently borrowed
+									cout << "The book is currently on loan. We have placed a hold "
+											 << "on it for you. Returning to user menu."
+											 << endl;
+								// add username to book's borrower queue
+								library.borrow(tempTitle, username);
+							}
+							else // book does not exist
+								cout << "The book, " << tempTitle
+										 << " does not exist in the library. Returning to user menu."
+										 << endl;
+						}
+						else
+							cout << "You have borrowed the maximum number of books."
+									 << " You must return a book you currently have borrowed"
+									 << " before borrowing any more. Returning to user menu."
+									 << endl;
 					break;
 					
 					//RETURN A BOOK
@@ -222,8 +252,6 @@ int main()
 
     while (status == ADMIN) // loop for admin menu
     {
-      // code for admin menu
-
       // print admin menu
 			displayMenuAdmin();
 			
@@ -264,9 +292,6 @@ int main()
 					
 					// get book, if book exists
 					tempBook = library.getBookFromTitle(tempTitle);
-					// due to the way getBookFromTitle is written,
-					// if the book does not exist the book returned
-					// will be empty
 					
 					// if the titles match, the book exists
 					if(tempBook.getTitle() == tempTitle)
@@ -301,7 +326,8 @@ int main()
 								cout << "Invalid input. Returning to menu." << endl;
 						}
 					}
-				break; // end case 2 (Remove A Book)
+				break;
+				// end case 2 (Remove A Book)
 					
 				// UPDATE BOOK INFORMATION // either change one or prompt for new information
 				case 3:
@@ -316,13 +342,15 @@ int main()
 							// DATE PUBLISHED
 							// CATALOG NUMBER
 						// }
-				break; // end case 3 (Update Book Information)
+				break;
+				// end case 3 (Update Book Information)
 						
-				// VIEW ALL LOANS
+				// VIEW ALL LOANS - Ready for testing
 				case 4:
-					// iterate through binary search tree (maybe develop as function in BST class? - Trenten/Jonathan)
-					// if book is on loan, print
-				break; // end case 4 (View All Loans)
+					// print all loans currently in library
+					library.printAllLoans();
+				break;
+				// end case 4 (View All Loans)
 				
 				// ADD/REMOVE USER
 				case 5:
@@ -336,7 +364,8 @@ int main()
 				case 6:
 						cout << "You have been successfully logged out.\n";
 						status = HOME; // set status to HOME to return to home menu
-				break; // end case 6 (Logout)
+				break;
+				// end case 6 (Logout)
 				
 				default:
 					cout << "Invalid selection." << endl;

@@ -25,7 +25,7 @@ public:
   bool operator>(const book &) const;
   // Greater than operator. Used for sorting.
   // Postcondition: Returns true if the title of this book is greater than the other book.
-  friend ifstream& operator>> (ifstream& isObject, book& inFile);
+  friend ifstream& operator>> (ifstream& inFile, book& newBook);
   // Insertion stream operator. Used for creating a new book.
 
   // SET FUNCTIONS

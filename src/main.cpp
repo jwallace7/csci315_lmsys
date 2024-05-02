@@ -1,27 +1,32 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
-#include "bookDatabase.h"
+#include "userDatabase.h"
 
 int main() {
-  ofstream outFile;
-  outFile.open("test.txt");
+    userDatabase userdb;
 
-  bookDatabase bookdb;
-  book book1("History of Programming", "Miles", 2012, 73481);
+    userdb.loadFromFile("output.txt");
 
-  book1.addBorrower("James");
-  book1.addBorrower("Jeremy");
-  book1.addBorrower("Jacob");
+    /*
+    user user1("Joseph", "donkeys841", false);
+    user user2("James", "Gr@ndC4nyon444", false);
+    user user3("Jeremy", "und3f1n3d123", true);
 
-  book book2("The Battle of Varna", "Henry", 1994, 23893);
-  book book3("AI for Dummies", "Smith", 2014, 91823);
+    user1.addBook("How to Program for Dummies");
+    user1.addBook("The Battle of Varna");
+    user2.addBook("AI for Dummies");
+    user3.addBook("History of Programming");
+    user3.addBook("Why Gaming is Addictive");
 
-  book3.addBorrower("Malaki");
+    userdb.addUser(user1);
+    userdb.addUser(user2);
+    userdb.addUser(user3);
+    */
 
-  bookdb.insert(book1);
-  bookdb.insert(book2);
-  bookdb.insert(book3);
+   user user5("Jarold", "MYN4MEisT3RRIBL4", true);
+   userdb.addUser(user5);
 
-  bookdb.saveToFile();
+    userdb.saveToFile("output.txt");
 }

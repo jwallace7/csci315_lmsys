@@ -5,8 +5,11 @@
 #include <string>
 #include <fstream>
 #include <unordered_map>
+#include <cassert>
 
 #include "user.h"
+
+const std::string DEFAULT_FILE = "users.txt";
 
 class userDatabase
 {
@@ -35,8 +38,8 @@ public:
   // Precondition: A user of the username provided exists in the database.
 
   // DATA MANAGEMENT FUNCTIONS
-  void loadFromFile(std::ifstream fileName); // *Alyssa* Loads the user database from a file
-  void saveToFile(std::ofstream fileName); // *Alyssa* Saves the user database to a file
+  void loadFromFile(std::string fileName = DEFAULT_FILE); // *Alyssa* Loads the user database from a file
+  void saveToFile(std::string fileName = DEFAULT_FILE); // *Alyssa* Saves the user database to a file
 
   // CONSTRUCTOR
   userDatabase(); // Constructor function
@@ -84,14 +87,49 @@ void userDatabase::removeUser(const std::string username)
 }//end removeUser
 
 // DATA MANAGEMENT FUNCTIONS
-void userDatabase::loadFromFile(std::ifstream fileName)
+void userDatabase::loadFromFile(std::string fileName)
 {
+    std::ifstream inFile; // Open the file
+    inFile.open(fileName);
 
+    assert(inFile.is_open()); // Assert the file is open
+
+    std::string line; // Declare line to be read at the end
+
+    while(line != "-999")
+    {
+        user newUser;
+        inFile >> newUser; // Read the user then insert it
+        addUser(newUser);
+
+        std::getline(inFile, line);
+    }//end while
+
+    inFile.close();
 }//end loadFromFile
 
-void userDatabase::saveToFile(std::ofstream fileName)
+void userDatabase::saveToFile(std::string fileName)
 {
+    std::ofstream outFile; // Open the file
+    outFile.open(fileName);
 
+    assert(outFile.is_open()); // Assert the file is open
+
+    bool first = true;
+
+    // Iterate through the unordered map and add each user until there are none left
+    for(auto i = users.begin(); i != users.end(); i++) {
+        if (first == true) // Ensures the first one doesnt produce two lines
+            first = false;
+        else
+            outFile << std::endl << std::endl;
+        
+        i->second.printInfo(outFile); // Save this user to the file
+    }//end for
+
+    outFile << std::endl << "-999"; // Write a -999 to indicate end of file
+
+    outFile.close();
 }//end saveToFile
 
 // CONSTRUCTOR

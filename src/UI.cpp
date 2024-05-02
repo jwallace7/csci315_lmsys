@@ -17,7 +17,7 @@ int main()
 {
   int choice;
   char ch;
-  string username, pass, tempTitle, tempAuth, newBorrower;
+  string username, pass, newPass, tempTitle, tempAuth, newBorrower;
 	double tempCatNum;
   bookDatabase library; // database with all books in the library
   systemStatus status = HOME;
@@ -222,21 +222,24 @@ int main()
 					// maybe - option to return to menu? this way user can view list as long as they wish
 					break;
 					
-					//UPDATE PROFILE - Can reuse a lot of code between here and REGISTER
+					//RESET PASSWORD - Ready for testing
 					case 5:
-						// print options for what the user can change (password, name, age, etc.)
-						// get user choice
-						// switch(choice)
-						// {
-									// PASSWORD
-									// case 1:
-									//	 code to change password
-									// NAME
-									// case 2:
-									//   code to change name
-									// ...
-									// default:
-						// }
+						// prompt user for new password
+						do
+						{
+							// prompt user for password
+							cout << "Please enter your new password: ";
+							cin >> newPass;
+							cout << endl;
+							
+							// if the password is different, break
+							if(newPass != pass)
+								break;
+							else // the password is the same, repeat
+								cout << "Password must be different from your last password." << endl;
+						}
+						while(newPass == pass)
+						cout << "Successfully changed your password. Returning to user menu." << endl;
 					break;
 					
 					// LOGOUT - Ready for testing
@@ -370,17 +373,12 @@ int main()
 				default:
 					cout << "Invalid selection." << endl;
 			}
-      // set status to...
-          // HOME to return to the home menu
-          // EXIT to exit the program
     }// end while for admin menu
 
   }// end while for UI
 
-    // will eventually need code to save data from "library" variable
-    // to a data file, working with Alyssa for this
+    //code to save data from library to the data file
 }
-
 
 // FUNCTION DEFINITIONS //
 
@@ -405,7 +403,7 @@ void displayMenuUser()
   cout << "2. Borrow a Book" << endl;
   cout << "3. Return a Book" << endl;
   cout << "4. View Borrowed Books" << endl;
-  cout << "5. Update profile" << endl;
+  cout << "5. Reset password" << endl;
   cout << "6. Logout" << endl;
   cout << "\nPlease select an option: ";
 }// end displayMenuUser()

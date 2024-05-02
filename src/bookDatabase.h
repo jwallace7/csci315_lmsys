@@ -6,11 +6,14 @@
 
 #include <string>
 #include <fstream>
+#include <cassert>
 
-class bookDatabase : bSearchTreeType<book>
+const std::string defaultFile = "test.txt";
+
+class bookDatabase : public bSearchTreeType<book>
 {
 public:
-    book getBookFromTitle(std::string title);
+    book getBookFromTitle(std::string title) const;
     // Function that gets a book based on the given title string.
     // Precondition: The book exists in the book database.
     // Postcondition: Returns a book if its found, returns an empty book if not.
@@ -19,15 +22,17 @@ public:
     void printAllLoans() const;
 
     // DATA MANAGEMENT FUNCTIONS
-    void loadFromFile(ifstream inFile); // *Alyssa* Function to load the address book from a file
-    void saveToFile(ofstream outFile); // *Alyssa* Function to save the address book to a file
+    void saveToFile(std::string fileName = defaultFile);
+    void loadFromFile(std::string fileName = defaultFile);
 private:
-    void printLoan(nodeType<book> *b) const;
+    void printLoan(binaryNodeType<book> *b) const; // Inorder traversal to print loans
+    void printBook(binaryNodeType<book> *b, ofstream& outFile) const; // Preorder traversal to print books
 };
 
 // Custom search function that returns a book if its found, and an empty book when its not.
-book bookDatabase::getBookFromTitle(std::string title) {
-    nodeType<book> *current; // Declare a node type of book.
+book bookDatabase::getBookFromTitle(std::string title) const 
+{
+    binaryNodeType<book> *current; // Declare a node type of book.
 
     if (root == nullptr)
         cout << "Cannot search an empty tree." << endl;
@@ -50,13 +55,14 @@ book bookDatabase::getBookFromTitle(std::string title) {
     return book();
 }//end getBookFromTitle
 
+// LOAN FUNCTIONS
 // Custom inorder traversal that prints all loans from books.
 void bookDatabase::printAllLoans() const {
     printLoan(root);
 }//end printALlLoans
 
 // In order traversal that prints the loan of the book, then iterates to the next book.
-void bookDatabase::printLoan(nodeType<book> *b) const {
+void bookDatabase::printLoan(binaryNodeType<book> *b) const {
     if (b != nullptr)
     {
         printLoan(b->lLink);
@@ -68,5 +74,44 @@ void bookDatabase::printLoan(nodeType<book> *b) const {
         printLoan(b->rLink);
     }
 }//end printLoan
+
+// SAVE FUNCTIONS
+void bookDatabase::saveToFile(std::string fileName) {
+    ofstream outFile;
+    outFile.open(fileName); // Open the file from the file name
+
+    assert(outFile.is_open()); // Assert that the file is open and was found
+
+    if (root != nullptr) {
+        root->info.printInfo(outFile);
+        printBook(root->lLink, outFile);
+        printBook(root->rLink, outFile);
+    }
+
+    outFile << "-999";
+    outFile.close(); // Close the file
+}//end saveToFile
+
+// Private function that performs preorder traversal starting at node b
+void bookDatabase::printBook(binaryNodeType<book> *b, ofstream& outFile) const {
+    if (b != nullptr)
+    {
+        outFile << std::endl << std::endl;
+        b->info.printInfo(outFile);
+        printBook(b->lLink, outFile);
+        printBook(b->rLink, outFile);
+    }
+}
+
+// LOAD FUNCTIONS
+void bookDatabase::loadFromFile(std::string fileName) {
+    ifstream inFile;
+    inFile.open(fileName);
+
+    assert(inFile.is_open());
+
+
+}
+
 
 #endif

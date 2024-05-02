@@ -12,6 +12,7 @@ using namespace std;
 //Definition of the node
 #ifndef nodeTypeDef
 #define nodeTypeDef
+
 template <class Type>
 struct nodeType
 {

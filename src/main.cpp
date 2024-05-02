@@ -1,16 +1,27 @@
 #include <iostream>
+#include <fstream>
 
-#include "linkedQueue.h"
+#include "bookDatabase.h"
 
 int main() {
-  linkedQueueType<int> f;
+  ofstream outFile;
+  outFile.open("test.txt");
 
-  f.addQueue(4);
-  f.addQueue(9);
-  f.addQueue(7);
+  bookDatabase bookdb;
+  book book1("History of Programming", "Miles", 2012, 73481);
 
-  linkedQueueType<int> g(f);
+  book1.addBorrower("James");
+  book1.addBorrower("Jeremy");
+  book1.addBorrower("Jacob");
 
-  std::cout << g.front() << std::endl;
-  std::cout << g.back() << std::endl;
+  book book2("The Battle of Varna", "Henry", 1994, 23893);
+  book book3("AI for Dummies", "Smith", 2014, 91823);
+
+  book3.addBorrower("Malaki");
+
+  bookdb.insert(book1);
+  bookdb.insert(book2);
+  bookdb.insert(book3);
+
+  bookdb.saveToFile();
 }

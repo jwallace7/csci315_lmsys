@@ -24,7 +24,9 @@ public:
   // equal to the other book.
   bool operator>(const book &) const;
   // Greater than operator. Used for sorting.
-  // Postcondition: Returns true if the title of this book is greater than the other book. 
+  // Postcondition: Returns true if the title of this book is greater than the other book.
+  friend istream& operator>>(istream&, book&);
+  // Insertion stream operator. Used for creating a new book.
 
   // SET FUNCTIONS
   void setTitle(std::string t);           // Function to set title
@@ -152,15 +154,15 @@ void book::printQueue(ofstream &outFile) const
   else { // Else, create a temporary queue and iterate through it to print out the queue
     linkedQueueType<std::string> tempQueue = borrowerQueue;
 
-    outFile << "Queue: " << tempQueue.front();
+    outFile << tempQueue.front();
     tempQueue.deleteQueue();
 
     while (!tempQueue.isEmptyQueue()) {
-        outFile << ", " << tempQueue.front();
+        outFile << " " << tempQueue.front();
         tempQueue.deleteQueue();
     }//end while
 
-    outFile << endl;
+    outFile << " 0";
   }//end if
 }//end printQueue function
 
@@ -171,7 +173,7 @@ void book::printInfo(ofstream &outFile) const
   printQueue(outFile);
 }//end printInfo function
 
-// CONSTRUCTOR
+// CONSTRUCTORS
 
 book::book(std::string newTitle, std::string name, int publishDate, double num) {
   setTitle(newTitle);

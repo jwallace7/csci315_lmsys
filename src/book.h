@@ -51,8 +51,7 @@ public:
   void printQueue(ofstream& outFile) const; // Function to print the book's full queue
 
   void printInfo() const; // *Alyssa* Function to print book information to console
-  void printInfo(ofstream outFile)
-      const; // *Alyssa* Function to print book information to an output file
+  void printInfo(ofstream& outFile) const; // *Alyssa* Function to print book information to an output file
 
   // Constructor. Borrower always starts off as an empty string, and the book
   // always starts off as not borrowed
@@ -147,10 +146,30 @@ void book::printTitle() const
 { cout << title << endl; } // end printTitle
 
 void book::printQueue(ofstream &outFile) const
-{
+{ 
+  if (borrowerQueue.isEmptyQueue()) // If the borrower queue is empty, print the title is empty
+    outFile << "0" << endl;
+  else { // Else, create a temporary queue and iterate through it to print out the queue
     linkedQueueType<std::string> tempQueue = borrowerQueue;
 
-}
+    outFile << "Queue: " << tempQueue.front();
+    tempQueue.deleteQueue();
+
+    while (!tempQueue.isEmptyQueue()) {
+        outFile << ", " << tempQueue.front();
+        tempQueue.deleteQueue();
+    }//end while
+
+    outFile << endl;
+  }//end if
+}//end printQueue function
+
+void book::printInfo(ofstream &outFile) const
+{
+  outFile << title << endl << author << endl << datePublished << endl <<
+  catalogNumber << endl;
+  printQueue(outFile);
+}//end printInfo function
 
 // CONSTRUCTOR
 

@@ -8,7 +8,7 @@
 #include <fstream>
 #include <cassert>
 
-const std::string defaultFile = "test.txt";
+const std::string DEFAULT_FILE = "test.txt";
 
 class bookDatabase : public bSearchTreeType<book>
 {
@@ -29,8 +29,8 @@ public:
 		// to the borrower queue of the book.
 
     // DATA MANAGEMENT FUNCTIONS
-    void saveToFile(std::string fileName = defaultFile);
-    void loadFromFile(std::string fileName = defaultFile);
+    void saveToFile(std::string fileName = DEFAULT_FILE);
+    void loadFromFile(std::string fileName = DEFAULT_FILE);
 private:
     void printLoan(binaryNodeType<book> *b) const; // Inorder traversal to print loans
     void printBook(binaryNodeType<book> *b, ofstream& outFile) const; // Preorder traversal to print books
@@ -94,7 +94,7 @@ void bookDatabase::borrow(std::string title, std::string user)
       while (current != nullptr)
       {
           if ((current->info).getTitle() == title)
-            current->addBorrower(user); // Return the book if its found.
+            current->info.addBorrower(user); // Return the book if its found.
           else if ((current->info).getTitle() > title)
             current = current->lLink; // If not, move to the next node.
           else
@@ -149,6 +149,5 @@ void bookDatabase::loadFromFile(std::string fileName) {
 
     inFile.close(); // Close the file
 }
-
 
 #endif

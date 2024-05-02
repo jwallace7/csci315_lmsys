@@ -77,7 +77,7 @@ void bookDatabase::printLoan(binaryNodeType<book> *b) const {
 
 // SAVE FUNCTIONS
 void bookDatabase::saveToFile(std::string fileName) {
-    ofstream outFile;
+    std::ofstream outFile;
     outFile.open(fileName); // Open the file from the file name
 
     assert(outFile.is_open()); // Assert that the file is open and was found
@@ -88,7 +88,7 @@ void bookDatabase::saveToFile(std::string fileName) {
         printBook(root->rLink, outFile);
     }
 
-    outFile << "-999";
+    outFile << std::endl << "-999";
     outFile.close(); // Close the file
 }//end saveToFile
 
@@ -105,12 +105,21 @@ void bookDatabase::printBook(binaryNodeType<book> *b, ofstream& outFile) const {
 
 // LOAD FUNCTIONS
 void bookDatabase::loadFromFile(std::string fileName) {
-    ifstream inFile;
+    std::ifstream inFile;
     inFile.open(fileName);
 
     assert(inFile.is_open());
 
+    std::string line;
+    while (line != "-999") {
+        book newBook;
+        inFile >> newBook; // Read the book then insert it
+        insert(newBook);
 
+        std::getline(inFile, line); // Read the next line to see if its -999
+    }
+
+    inFile.close(); // Close the file
 }
 
 

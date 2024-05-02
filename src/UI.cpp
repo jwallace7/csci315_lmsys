@@ -17,6 +17,7 @@ int main()
 {
   int choice, flag, tempDate;
   char ch;
+	bool updated;
   string username, pass, newUsername, newPass, tempTitle, tempAuth, newBorrower;
 	double tempCatNum;
   bookDatabase library; // database with all books in the library
@@ -222,13 +223,17 @@ int main()
 					
 					//RETURN A BOOK
 					case 3:
-					// print the titles of user's current loans, I.e.:
+					// print the titles of user's current loans
+					// (must develop extra function in book.h to do so)
+					// I.e.:
 						// 1. Jack and the Beanstalk
 						// 2. Little Women
 						// etc.
 					// get user choice
 					// remove book from user's list of borrowed books
+					// (must develop algorithm to remove nth book from a users list)
 					// pop book borrower queue
+					// (develop extra algorithm to return book node so we do not have to add/delete?)
 					// while(current borrower has borrowed max books || current borrower username does not exist)
 						// pop borrower queue
 					break;
@@ -342,6 +347,13 @@ int main()
 					// if the titles match, the book exists
 					if(tempBook.getTitle() == tempTitle)
 					{
+						// if the book is on loan, it must be returned first
+						if(tempBook.isBorrowed())
+						{
+							cout << "Cannot delete a book while it is loaned out."
+						       << "\nReturning to adminstrator menu." << endl;
+						}
+						
 						// print information to console
 						cout << "\n-----     BOOK INFO     -----";
 						tempBook.printInfo();
@@ -375,25 +387,65 @@ int main()
 				break;
 				// end case 2 (Remove A Book)
 					
-				// UPDATE BOOK INFORMATION // either change one or prompt for new information
+				// UPDATE BOOK INFORMATION
 				case 3:
-					// prompt for title
-					// if book exists
-						// Output book information //
-						// Prompt for which option to edit (I.e., 1 - Title, 2 - Author)
-						// switch(choice)
-						// {
+					// Prompt for title
+					cout << "Input the title of the book you want to update: ";
+					cin >> tempTitle;
+					cout << endl;
+					
+					// get book, if book exists
+					tempBook = library.getBookFromTitle(tempTitle);
+					
+					// if the titles match, the book exists
+					if(tempBook.getTitle() == tempTitle)
+					{
+						// print information to console
+						cout << "\n-----     BOOK INFO     -----";
+						tempBook.printInfo();
+						cout << "-----------------------------" << endl;
+						
+						
+						// Prompt for which option to update
+						cout << "What would you like to update?"
+								 << "1 - Title\n"
+								 << "2 - Author\n"
+								 << "3 - Date Published\n"
+								 << "4 - Catalog Number\n"
+								 << "Enter the corresponding number: ";
+						cin >> choice;
+						cout << endl;
+						
+						switch(choice)
+						{
 							// TITLE
+							case 1:
+								// prompt for new title
+								cout << "Enter the new title: ";
+								cin.getline(tempTitle);
+								cout << endl;
+								
+							break;
 							// AUTHOR
+							case 2:
+							break;
 							// DATE PUBLISHED
+							case 3:
+							break;
 							// CATALOG NUMBER
-						// }
+							case 4:
+							break;
+							
+							default:
+								cout << "Invalid input." << endl;
+						}
+						
 				break;
 				// end case 3 (Update Book Information)
 						
 				// VIEW ALL LOANS - Ready for testing
 				case 4:
-					// print all loans currently in library
+					// print all books currently loaned out from the library
 					library.printAllLoans();
 				break;
 				// end case 4 (View All Loans)
@@ -483,7 +535,7 @@ void displayMenuUser()
   cout << "2. Borrow a Book" << endl;
   cout << "3. Return a Book" << endl;
   cout << "4. View Borrowed Books" << endl;
-  cout << "5. Reset password" << endl;
+  cout << "5. Reset Password" << endl;
   cout << "6. Logout" << endl;
   cout << "\nPlease select an option: ";
 }// end displayMenuUser()

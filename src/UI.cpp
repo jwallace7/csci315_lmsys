@@ -162,7 +162,7 @@ int main()
 					// if present, print book information
 					break;
 					
-					//BORROW A BOOK
+					//BORROW A BOOK - Ready for testing
 					case 2:
 						if(!currentUser.hasMaxBooks())
 						{
@@ -196,7 +196,11 @@ int main()
 										 << " does not exist in the library. Returning to user menu."
 										 << endl;
 						}
-						
+						else
+							cout << "You have borrowed the maximum number of books."
+									 << " You must return a book you currently have borrowed"
+									 << " before borrowing any more. Returning to user menu."
+									 << endl;
 					break;
 					
 					//RETURN A BOOK

@@ -4,7 +4,7 @@
 #define H_binarySearchTree
 #include <iostream>
 #include "binaryTree.h"
- 
+
 using namespace std;
 
 template <class elemType>
@@ -51,11 +51,11 @@ bool bSearchTreeType<elemType>::search
     binaryNodeType<elemType> *current;
     bool found = false;
 
-    if (root == nullptr)
+    if (this->root == nullptr)
         cout << "Cannot search an empty tree." << endl;
     else
     { 
-       current = root;
+       current = this->root;
 
        while (current != nullptr && !found)
         {
@@ -85,12 +85,12 @@ void bSearchTreeType<elemType>::insert
     newNode->lLink = nullptr;
     newNode->rLink = nullptr;
 
-    if (root == nullptr)
-        root = newNode;
+    if (this->root == nullptr)
+      this->root = newNode;
     else
     {
-        current = root;
- 
+        current = this->root;
+
         while (current != nullptr)
         {
             trailCurrent = current;
@@ -123,13 +123,13 @@ void bSearchTreeType<elemType>::deleteNode
     binaryNodeType<elemType> *trailCurrent; //pointer behind current
     bool found = false;
 
-    if (root == nullptr)
+    if (this->root == nullptr)
         cout << "Cannot delete from an empty tree." 
              << endl;
     else
     {
-        current = root;
-        trailCurrent = root;
+        current = this->root;
+        trailCurrent = this->root;
 
         while (current != nullptr && !found)
         {
@@ -151,8 +151,8 @@ void bSearchTreeType<elemType>::deleteNode
                  << endl;
         else if (found)
         {
-            if (current == root)
-                deleteFromTree(root);
+            if (current == this->root)
+                deleteFromTree(this->root);
             else if (trailCurrent->info > deleteItem)
                 deleteFromTree(trailCurrent->lLink);
             else
@@ -211,7 +211,7 @@ void bSearchTreeType<elemType>::deleteFromTree
             p->lLink = current->lLink;
         else
             trailCurrent->rLink = current->lLink;
- 
+
         delete current;
     }//end else
 } //end deleteFromTree

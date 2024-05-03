@@ -5,8 +5,6 @@
 #include <string>
 #include <fstream>
 
-// NOTE - Need to overload = operator
-
 class user
 {
 public:
@@ -20,21 +18,21 @@ public:
   // GET FUNCTIONS
   int getBookIndex(std::string bookName) const; // Returns the index of bookName in the user's book list.
   // Postcondition: Returns the index of the book in the book array. If it doesn't exist, returns -1.
-	
+
   std::string getUsername() const; // Returns the username of the user.
   // Postcondition: Returns the std::string of the username.
-	
-	// SET FUNCTIONS
-	void setUsername(std::string str); // Sets the username of the user
-	// Postcondition: username = str
-	
-	void setPassword(std::string str); // Sets the password of the user
-	// Postcondition: password = str
-	
-	void setAdmin(bool ad = true); // Sets admin status of the user
-	// Postcondition: admin = ad;
 
-	// VALIDATION FUNCTIONS
+  // SET FUNCTIONS
+  void setUsername(std::string str); // Sets the username of the user
+  // Postcondition: username = str
+
+  void setPassword(std::string str); // Sets the password of the user
+  // Postcondition: password = str
+
+  void setAdmin(bool ad = true); // Sets admin status of the user
+  // Postcondition: admin = ad;
+
+  // VALIDATION FUNCTIONS
   bool hasBook(std::string bookName) const; // Checks to see if this user has a book of bookName.
   // Postcondition: Returns true if bookName is in the user's book list, false otherwise.
 
@@ -43,11 +41,11 @@ public:
 
   bool hasMaxBooks() const; // Checks to see if the user has the maximum number of books.
   // Postcondition: Returns true if the user has the maximum number of books, false otherwise.
-	
-	bool validate(std::string pass) const; // Checks to see if password is same as user.
-	// Postcondition: Returns true if pass is the same as password.
-	
-	// BOOK FUNCTIONS
+
+  bool validate(std::string pass) const; // Checks to see if password is same as user.
+  // Postcondition: Returns true if pass is the same as password.
+
+  // BOOK FUNCTIONS
 
   void addBook(std::string bookName); // Adds a book to the user's inventory.
   void removeBook(std::string bookName); // Removes a book from the user's inventory if it has the book.
@@ -63,7 +61,7 @@ public:
 
 private:
   bool admin; // Whether or not the user is an admin.
-	std::string password;
+  std::string password;
   std::string username; // Username of the user.
   std::string books[5]; // String array of books the user owns.
   int bookCount = 0; // Count of how many users the book has.
@@ -76,7 +74,7 @@ private:
 const user& user::operator=(const user& otherUser) {
     if (this != &otherUser)
       copyUser(otherUser);
-    
+
     return *this;
 }//end assignment operator
 
@@ -126,7 +124,7 @@ void user::setUsername(std::string str)
 void user::setPassword(std::string str)
 { password = str; }//end setPassword
 
-void setAdmin(bool ad)
+void user::setAdmin(bool ad)
 { admin = ad; }// end setAdmin
 
 // VALIDATION FUNCTIONS
@@ -151,7 +149,7 @@ void user::addBook(std::string bookName) {
       while(books[i] != "")
       { i++; }//end while
       books[i] = bookName;
-          
+
       bookCount += 1; // Increment book count by 1
     } else
       std::cout << "You have the maximum number of books." << std::endl;//end else
@@ -194,7 +192,7 @@ void user::printInfo(std::ofstream& outFile) {
 
 user::user(std::string name, std::string pass, bool ad) {
   username = name;
-	password = pass;
+  password = pass;
   admin = ad;
 }//end constructor
 

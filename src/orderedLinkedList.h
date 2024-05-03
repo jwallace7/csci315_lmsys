@@ -51,7 +51,7 @@ bool orderedLinkedList<Type>::search(const Type &searchItem) const {
   bool found = false;
   nodeType<Type> *current; // pointer to traverse the list
 
-  current = first; // start the search at the first node
+  current = this->first; // start the search at the first node
 
   while (current != nullptr && !found)
     if (current->info >= searchItem)
@@ -79,13 +79,13 @@ void orderedLinkedList<Type>::insert(const Type &newItem) {
   newNode->link = nullptr;      // set the link field of the node
                            // to nullptr
 
-  if (first == nullptr) // Case 1
+  if (this->first == nullptr) // Case 1
   {
-    first = newNode;
-    last = newNode;
-    count++;
+    this->first = newNode;
+    this->last = newNode;
+    this->count++;
   } else {
-    current = first;
+    current = this->first;
     found = false;
 
     while (current != nullptr && !found) // search the list
@@ -96,20 +96,20 @@ void orderedLinkedList<Type>::insert(const Type &newItem) {
         current = current->link;
       }
 
-    if (current == first) // Case 2
+    if (current == this->first) // Case 2
     {
-      newNode->link = first;
-      first = newNode;
-      count++;
+      newNode->link = this->first;
+      this->first = newNode;
+      this->count++;
     } else // Case 3
     {
       trailCurrent->link = newNode;
       newNode->link = current;
 
       if (current == nullptr)
-        last = newNode;
+        this->last = newNode;
 
-      count++;
+      this->count++;
     }
   } // end else
 } // end insert
@@ -131,10 +131,10 @@ void orderedLinkedList<Type>::deleteNode(const Type &deleteItem) {
                                           // before current
   bool found;
 
-  if (first == nullptr) // Case 1
+  if (this->first == nullptr) // Case 1
     cout << "Cannot delete from an empty list." << endl;
   else {
-    current = first;
+    current = this->first;
     found = false;
 
     while (current != nullptr && !found) // search the list
@@ -151,24 +151,24 @@ void orderedLinkedList<Type>::deleteNode(const Type &deleteItem) {
     else if (current->info == deleteItem) // the item to be
                                           // deleted is in the list
     {
-      if (first == current) // Case 2
+      if (this->first == current) // Case 2
       {
-        first = first->link;
+        this->first = this->first->link;
 
-        if (first == nullptr)
-          last = nullptr;
+        if (this->first == nullptr)
+          this->last = nullptr;
 
         delete current;
       } else // Case 3
       {
         trailCurrent->link = current->link;
 
-        if (current == last)
-          last = trailCurrent;
+        if (current == this->last)
+          this->last = trailCurrent;
 
         delete current;
       }
-      count--;
+      this->count--;
     } else // Case 4
       cout << "The item to be deleted is not in the "
            << "list." << endl;

@@ -15,14 +15,13 @@ void displayMenuUser();
 void displayMenuAdmin();
 
 // special function for handling a book return
-int returnLogicHandler(book, userDatabase&, bookDatabase&);
+int returnLogicHandler(string, userDatabase&, bookDatabase&);
 
 
 int main()
 {
   int choice, flag, tempDate;
   char ch;
-  bool updated;
   string username, pass, newUsername, newPass, tempTitle, tempAuth, newBorrower;
   double tempCatNum;
   bookDatabase library; // database with all books in the library
@@ -656,7 +655,5 @@ int returnLogicHandler(string title, userDatabase& userDat, bookDatabase& bookDa
     }
     return 1;
   }
-  else
-    return -1;
-
+  return -1;
 }// end returnLogicHandler

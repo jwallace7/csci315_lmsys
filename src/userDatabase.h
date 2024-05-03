@@ -9,7 +9,7 @@
 
 #include "user.h"
 
-const std::string DEFAULT_FILE = "users.txt";
+const std::string DEFAULT_FILE_USER_DATABASE = "../datafiles/users.txt";
 
 class userDatabase
 {
@@ -38,8 +38,8 @@ public:
   // Precondition: A user of the username provided exists in the database.
 
   // DATA MANAGEMENT FUNCTIONS
-  void loadFromFile(std::string fileName = DEFAULT_FILE); // *Alyssa* Loads the user database from a file
-  void saveToFile(std::string fileName = DEFAULT_FILE); // *Alyssa* Saves the user database to a file
+  void loadFromFile(std::string fileName = DEFAULT_FILE_USER_DATABASE); // Loads the user database from a file
+  void saveToFile(std::string fileName = DEFAULT_FILE_USER_DATABASE); // Saves the user database to a file
 
   // CONSTRUCTOR
   userDatabase(); // Constructor function
@@ -123,7 +123,7 @@ void userDatabase::saveToFile(std::string fileName)
             first = false;
         else
             outFile << std::endl << std::endl;
-        
+
         i->second.printInfo(outFile); // Save this user to the file
     }//end for
 

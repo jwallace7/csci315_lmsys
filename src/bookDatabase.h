@@ -8,7 +8,7 @@
 #include <fstream>
 #include <cassert>
 
-const std::string DEFAULT_FILE = "test.txt";
+const std::string DEFAULT_FILE_BOOK_DATABASE = "../datafiles/books.txt";
 
 class bookDatabase : public bSearchTreeType<book>
 {
@@ -20,17 +20,17 @@ public:
 
     // LOAN FUNCTIONS
     void printAllLoans() const;
-		
-		// BORROW/RETURN FUNCTIONS
-		void borrow(std::string title, std::string user);
-		// Function that adds a user to the borrower queue of a book
-		// in the database.
-		// Postcondition: If the book exists, then user is added
-		// to the borrower queue of the book.
+
+    // BORROW/RETURN FUNCTIONS
+    void borrow(std::string title, std::string user);
+    // Function that adds a user to the borrower queue of a book
+    // in the database.
+    // Postcondition: If the book exists, then user is added
+    // to the borrower queue of the book.
 
     // DATA MANAGEMENT FUNCTIONS
-    void saveToFile(std::string fileName = DEFAULT_FILE);
-    void loadFromFile(std::string fileName = DEFAULT_FILE);
+    void saveToFile(std::string fileName = DEFAULT_FILE_BOOK_DATABASE);
+    void loadFromFile(std::string fileName = DEFAULT_FILE_BOOK_DATABASE);
 private:
     void printLoan(binaryNodeType<book> *b) const; // Inorder traversal to print loans
     void printBook(binaryNodeType<book> *b, ofstream& outFile) const; // Preorder traversal to print books
@@ -85,8 +85,8 @@ void bookDatabase::printLoan(binaryNodeType<book> *b) const {
 // BORROW/RETURN FUNCTIONS
 void bookDatabase::borrow(std::string title, std::string user)
 {
-	binaryNodeType<book> *current; // Declare a node type of book.
-	if (root == nullptr)
+  binaryNodeType<book> *current; // Declare a node type of book.
+  if (root == nullptr)
         cout << "Cannot borrow from an empty library." << endl;
   else
   { 
@@ -100,7 +100,7 @@ void bookDatabase::borrow(std::string title, std::string user)
           else
             current = current->rLink;
         }//end while
-		}
+    }
 }
 
 // SAVE FUNCTIONS

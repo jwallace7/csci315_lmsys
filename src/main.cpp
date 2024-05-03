@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <limits>
 #include "bookDatabase.h"
 #include "userDatabase.h"
 #include "user.h"
@@ -11,15 +12,16 @@ enum systemStatus{HOME, USER, ADMIN, EXIT}; // special data type to keep track o
 
 // menu display functions
 void displayPreMenu();
-void displayMenuUser();
+void displayMenuUser(string);
 void displayMenuAdmin();
 
 // special function for handling a book return
-int returnLogicHandler(string, userDatabase&, bookDatabase&);
+int returnLogicHandler(string, string, userDatabase&, bookDatabase&);
 
 
 int main()
 {
+	// VARIABLES
   int choice, flag, tempDate;
   char ch;
   string username, pass, newUsername, newPass, tempTitle, tempAuth, newBorrower;
@@ -30,11 +32,12 @@ int main()
   user currentUser("", "", false); // will be the current loaded user in the system
   book tempBook; //will be a temp book, for adding a book to the system
   user newUser; // used for adding a new user to the database
-  // eventually create a user database of some kind
 
+	// LOADING DATA
   library.loadFromFile(); // load data from book database file into library
   userList.loadFromFile(); // load data from user database file into userList
 
+	// ENTERING MENU SYSTEM
   while (status != EXIT) // while user does not exit, continue looping
   {
     //***HOME MENU***//
@@ -137,7 +140,7 @@ int main()
           }
          break; // end case 2 (Register)
 
-        // EXIT - Ready for testing
+        // EXIT
         case 3:
           status = EXIT;
           break; // end case 3 (Exit)
@@ -150,8 +153,17 @@ int main()
     //***USER MENU***//
     while (status == USER) // loop for user menu
     {
-      // print user menu
-      displayMenuUser();
+			//reinitializing certain variables
+			tempTitle = "";
+			tempAuth = "";
+			tempDate = 1900;
+			tempCatNum = 000.00;
+      
+			//reinitializing input stream
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			
+			// print user menu
+      displayMenuUser(username);
 
       // get user selection
       cin >> choice;
@@ -161,12 +173,6 @@ int main()
       // process selection
       switch(choice)
       {		
-					//reinitializing certain variables
-					tempTitle = "";
-					tempAuth = "";
-					tempDate = 1900;
-					tempCatNum = 000.00;
-
           //SEARCH FOR BOOKS
           case 1:
             // input title
@@ -180,7 +186,7 @@ int main()
             {
               // book exists, print out book information
               cout << "This book exists in the library." << endl;
-              cout << "-----     BOOK INFO     -----";
+              cout << "-----     BOOK INFO     -----" << endl;
               tempBook.printInfo();
               cout << "-----------------------------" << endl;
             }
@@ -189,16 +195,16 @@ int main()
               // book does not exist, print relevant message
               cout << "The book does not exist in the library. ";
             }
-            cout << "Returning to user menu." << endl;
+            cout << "Press enter to return to the user menu." << endl;
           break;
 
-          //BORROW A BOOK - Ready for testing
+          //BORROW A BOOK
           case 2:
             if(!currentUser.hasMaxBooks())
             {
               // input title
               cout << "Input the title of the book you want to borrow: ";
-              cin >> tempTitle;
+              getline(cin, tempTitle);
               cout << endl;
 
               // get book, if book exists
@@ -212,25 +218,28 @@ int main()
                   // add to user's book list
                   currentUser.addBook(tempTitle);
                   // output relevant message
-                  cout << "Book borrowed. Returning to user menu." << endl;
+                  cout << "Book borrowed." << endl;
                 }
                 else // book is currently borrowed
+								{
                   cout << "The book is currently on loan. We have placed a hold "
-                       << "on it for you. Returning to user menu."
+                       << "on it for you."
                        << endl;
+								}
                 // add username to book's borrower queue
                 library.borrow(tempTitle, username);
               }
               else // book does not exist
                 cout << "The book, " << tempTitle
-                     << " does not exist in the library. Returning to user menu."
+                     << " does not exist in the library."
                      << endl;
             }
             else
               cout << "You have borrowed the maximum number of books."
                    << " You must return a book you currently have borrowed"
-                   << " before borrowing any more. Returning to user menu."
+                   << " before borrowing any more."
                    << endl;
+						cout << " Press enter to return to the user menu." << endl;
           break;
 
           //RETURN A BOOK - Ready for testing
@@ -252,7 +261,7 @@ int main()
               currentUser.removeBook(tempTitle);
 
               // logic to handle passing book to next user
-              if(returnLogicHandler(tempTitle, userList, library) > 0)
+              if(returnLogicHandler(tempTitle, username, userList, library) > 0)
                 cout << "Book returned successfully.";
               else
                 cout << "Error in return handler logic.";
@@ -262,17 +271,16 @@ int main()
             cout << " Returning to user menu." << endl;
           break;
 
-          //VIEW BORROWED BOOKS - Ready for testing
+          //VIEW BORROWED BOOKS
           case 4:
             // code to print users borrowed books
             cout << "Here are the books you have currently borrowed:" << endl;
             currentUser.printBooks();
-            cout << "Returning to user menu." << endl;
+            cout << "Press enter to return to the user menu." << endl;
           break;
 
           //RESET PASSWORD - Ready for testing
           case 5:
-            // prompt user for new password
             do
             {
               // prompt user for password
@@ -287,7 +295,9 @@ int main()
                 cout << "Password must be different from your last password." << endl;
             }
             while(newPass == pass);
-            cout << "Successfully changed your password. Returning to user menu." << endl;
+						// change password and notify user
+						currentUser.setPassword(newPass);
+            cout << "Successfully changed your password. Press enter to return to the user menu." << endl;
           break;
 
           // LOGOUT - Ready for testing
@@ -308,6 +318,9 @@ int main()
       tempAuth = "";
       tempDate = 1900;
       tempCatNum = 000.00;
+			
+			//reinitializing input stream
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			
       // print admin menu
       displayMenuAdmin();
@@ -592,11 +605,11 @@ void displayPreMenu()
   cout << "3. Exit" << endl;
 }// end displayPreMenu()
 
-void displayMenuUser()
+void displayMenuUser(string name)
 {
   string username;
 
-  cout << "Welcome " << username << ", you're logged in as a User." << endl;
+  cout << "Welcome " << name << ", you're logged in as a User." << endl;
   cout << endl;
   cout << "1. Search for Books" << endl;
   cout << "2. Borrow a Book" << endl;
@@ -619,7 +632,7 @@ void displayMenuAdmin()
   cout << "6. Logout" << endl;
 }// end displayMenuAdmin()
 
-int returnLogicHandler(string title, userDatabase& userDat, bookDatabase& bookDat)
+int returnLogicHandler(string title, string returningUser, userDatabase& userDat, bookDatabase& bookDat)
 {
   // nodes to point to book and user
   book returnBook;
@@ -639,7 +652,7 @@ int returnLogicHandler(string title, userDatabase& userDat, bookDatabase& bookDa
       nextBorrowerName = returnBook.currentBorrower();
 
       // next borrower must exist
-      if(userDat.findUser(nextBorrowerName))
+      if((userDat.findUser(nextBorrowerName)) && (nextBorrowerName != returningUser))
       {
         // user exists
         nextBorrowerUser = userDat.getUser(nextBorrowerName);

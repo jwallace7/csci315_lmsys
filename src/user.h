@@ -88,7 +88,7 @@ std::ifstream& operator>>(std::ifstream& inFile, user& newUser)
     std::string line; // String value to read lines
 
     inFile >> newUser.username >> newUser.password >> adminValue; // Get username, password, and admin value
-    std::cout << adminValue << std::endl;
+
     newUser.admin = (adminValue == '1'); // Convert admin value to a boolean variable based on the given character
 
     inFile.ignore(999, '\n'); // Ignore until the next line

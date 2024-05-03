@@ -94,13 +94,16 @@ void bookDatabase::borrow(std::string title, std::string user)
       while (current != nullptr)
       {
           if ((current->info).getTitle() == title)
-            current->info.addBorrower(user); // Return the book if its found.
+          {
+            (current->info).addBorrower(user); // Add borrower to the book if its found.
+            break;
+          }
           else if ((current->info).getTitle() > title)
             current = current->lLink; // If not, move to the next node.
           else
             current = current->rLink;
-        }//end while
-    }
+      }//end while
+  }
 }
 
 // SAVE FUNCTIONS

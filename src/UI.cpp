@@ -13,6 +13,10 @@ void displayPreMenu();
 void displayMenuUser();
 void displayMenuAdmin();
 
+// special function for handling a book return
+void returnLogicHandler(book, userDatabase&, bookDatabase&);
+
+
 int main()
 {
   int choice, flag, tempDate;
@@ -221,21 +225,33 @@ int main()
 									 << endl;
 					break;
 					
-					//RETURN A BOOK
+					//RETURN A BOOK - Ready for testing
 					case 3:
-					// print the titles of user's current loans
-					// (must develop extra function in book.h to do so)
-					// I.e.:
-						// 1. Jack and the Beanstalk
-						// 2. Little Women
-						// etc.
-					// get user choice
-					// remove book from user's list of borrowed books
-					// (must develop algorithm to remove nth book from a users list)
-					// pop book borrower queue
-					// (develop extra algorithm to return book node so we do not have to add/delete?)
-					// while(current borrower has borrowed max books || current borrower username does not exist)
-						// pop borrower queue
+						// print the titles of user's current loans
+						cout << "Here are your current loans: " << endl;
+						currentUser.printBooks();
+						cout << endl;
+						
+						// prompt user for title to remove
+						cout << "Enter the title of the book you want to return: ";
+						cin.getline(tempTitle);
+						cout << endl;
+						
+						// if the book is held by the user
+						if(currentUser.hasBook(tempTitle));
+						{
+							// remove book from user's list of borrowed books
+							currentUser.removeBook(tempTitle);
+							
+							// logic to handle passing book to next user
+							if(returnLogicHandler(tempTitle, userList, library) > 0)
+								cout << "Book returned successfully.";
+							else
+								cout << "Error in return handler logic.";
+						}
+						else
+							cout << "Title is incorrect.";
+						cout << " Returning to user menu." << endl;
 					break;
 					
 					//VIEW BORROWED BOOKS - Ready for testing
@@ -338,7 +354,7 @@ int main()
 				case 2:
 					// Prompt for title
 					cout << "Input the title of the book you want to remove: ";
-					cin >> tempTitle;
+					cin.getline(tempTitle);
 					cout << endl;
 					
 					// get book, if book exists
@@ -387,11 +403,11 @@ int main()
 				break;
 				// end case 2 (Remove A Book)
 					
-				// UPDATE BOOK INFORMATION
+				// UPDATE BOOK INFORMATION - Ready for testing
 				case 3:
 					// Prompt for title
 					cout << "Input the title of the book you want to update: ";
-					cin >> tempTitle;
+					cin.getline(tempTitle);
 					cout << endl;
 					
 					// get book, if book exists
@@ -410,7 +426,7 @@ int main()
 						cout << "What would you like to update?"
 								 << "1 - Title\n"
 								 << "2 - Author\n"
-								 << "3 - Date Published\n"
+								 << "3 - Year Published\n"
 								 << "4 - Catalog Number\n"
 								 << "Enter the corresponding number: ";
 						cin >> choice;
@@ -425,21 +441,58 @@ int main()
 								cin.getline(tempTitle);
 								cout << endl;
 								
+								library.deleteNode(tempBook);
+								tempBook.setTitle(tempTitle);
+								library.insert(tempBook);
+								
+								cout << "Updated title successfully.";
 							break;
+							
 							// AUTHOR
 							case 2:
+								// prompt for new author
+								cout << "Enter the new author: ";
+								cin.getline(tempAuth);
+								cout << endl;
+								
+								library.deleteNode(tempBook);
+								tempBook.setAuthor(tempAuth);
+								library.insert(tempBook);
+								
+								cout << "Updated author successfully.";
 							break;
-							// DATE PUBLISHED
+							// YEAR PUBLISHED
 							case 3:
+								// prompt for new date
+								cout << "Enter the new publishing year: ";
+								cin >> tempDate;
+								cout << endl;
+								
+								library.deleteNode(tempBook);
+								tempBook.setDate(tempDate);
+								library.insert(tempBook);
+								
+								cout << "Updated publish year successfully.";
 							break;
 							// CATALOG NUMBER
 							case 4:
+								// prompt for new catalog number
+								cout << "Enter the new catalog number (in the format ###.##): ";
+								cin >> tempCatNum;
+								cout << endl;
+								
+								library.deleteNode(tempBook);
+								tempBook.setCatalogNumber(tempCatNum);
+								library.insert(tempBook);
 							break;
 							
 							default:
 								cout << "Invalid input." << endl;
 						}
-						
+					}
+					else
+						cout << "Book does not exist in library."
+					cout << " Returning to administrator menu." << endl;
 				break;
 				// end case 3 (Update Book Information)
 						
@@ -551,3 +604,53 @@ void displayMenuAdmin()
   cout << "5. Add/Remove User (Admins)" << endl;
   cout << "6. Logout" << endl;
 }// end displayMenuAdmin()
+
+int returnLogicHandler(string title, userDatabase& userDat, bookDatabase& bookDat)
+{
+	// nodes to point to book and user
+	book returnBook;
+	string nextBorrowerName;
+	user nextBorrowerUser;
+	bool found == true;
+	
+	// we assume book is held in library
+	tempBook = library.getBookFromTitle(tempTitle);
+	
+	if(tempTitle == tempBook.getTitle())
+	{
+		// pop book borrower queue and get next borrower
+		tempBook.removeBorrower();
+		do
+		{
+			nextBorrowerName = tempBook.getCurrentBorrower();
+			
+			// next borrower must exist
+			if(userDat.findUser(nextBorrowerName))
+			{
+				// user exists
+				nextBorrowerUser = userList.getUser(nextBorrowerName);
+			}
+			else if(nextBorrowername = "")
+			{
+				// no user found to give book to
+				found = false;
+				break;
+			}
+			else
+				tempBook.removeBorrower(); // borrower does not exist in userDat
+		}
+		while(nextBorrowerUser.hasMaxBooks()) // if next borrower does not have max books, then a suitable user has been found
+		
+		// user was found, we can now 
+		if(found)
+		{
+			nextBorrowerUser.addBook(tempTitle)
+			library.deleteNode(library.getBookFromTitle(tempTitle));
+			library.insert(tempBook);
+		}
+		return 1;
+	}
+	else
+		return -1;
+	
+}// end returnLogicHandler

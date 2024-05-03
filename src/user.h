@@ -169,7 +169,6 @@ void user::removeBook(std::string bookName) {
 }//end removeBook
 
 void user::printBooks() const {
-  std::cout << "Books: " << std::endl;
   for (int i = 0; i < 5; i++)
     if (books[i] != "")
       std::cout << books[i] << std::endl;

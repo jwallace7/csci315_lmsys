@@ -9,7 +9,7 @@
 
 #include "user.h"
 
-const std::string DEFAULT_FILE_USER_DATABASE = "../datafiles/users.txt";
+const std::string DEFAULT_FILE_USER_DATABASE = "datafiles/users.txt";
 
 class userDatabase
 {

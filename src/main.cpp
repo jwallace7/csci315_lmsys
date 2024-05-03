@@ -161,8 +161,11 @@ int main()
       // process selection
       switch(choice)
       {		
-          //reinitializing certain variables
-          tempTitle = "";
+					//reinitializing certain variables
+					tempTitle = "";
+					tempAuth = "";
+					tempDate = 1900;
+					tempCatNum = 000.00;
 
           //SEARCH FOR BOOKS
           case 1:
@@ -300,6 +303,12 @@ int main()
 
     while (status == ADMIN) // loop for admin menu
     {
+			//reinitializing certain variables
+      tempTitle = "";
+      tempAuth = "";
+      tempDate = 1900;
+      tempCatNum = 000.00;
+			
       // print admin menu
       displayMenuAdmin();
 

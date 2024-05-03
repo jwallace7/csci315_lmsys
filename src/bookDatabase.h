@@ -8,7 +8,7 @@
 #include <fstream>
 #include <cassert>
 
-const std::string DEFAULT_FILE_BOOK_DATABASE = "../datafiles/books.txt";
+const std::string DEFAULT_FILE_BOOK_DATABASE = "datafiles/books.txt";
 
 class bookDatabase : public bSearchTreeType<book>
 {

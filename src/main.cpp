@@ -16,12 +16,15 @@ void displayMenuUser(string);
 void displayMenuAdmin();
 
 // special function for handling a book return
-int returnLogicHandler(string, string, userDatabase&, bookDatabase&);
+int returnLogicHandler(string title, string returningUser, userDatabase& userDat, bookDatabase& bookDat);
+// Postcondition: The book will have the borrower queue popped until a user who has not reached
+// 								their checkout limit is found (that is not the returning user). That user will
+//								have the book title added to their list of borrowed books.
 
 
 int main()
 {
-	// VARIABLES
+  // VARIABLES
   int choice, flag, tempDate;
   char ch;
   string username, pass, newUsername, newPass, tempTitle, tempAuth, newBorrower;
@@ -33,11 +36,11 @@ int main()
   book tempBook; //will be a temp book, for adding a book to the system
   user newUser; // used for adding a new user to the database
 
-	// LOADING DATA
+  // LOADING DATA
   library.loadFromFile(); // load data from book database file into library
   userList.loadFromFile(); // load data from user database file into userList
 
-	// ENTERING MENU SYSTEM
+  // ENTERING MENU SYSTEM
   while (status != EXIT) // while user does not exit, continue looping
   {
     //***HOME MENU***//
@@ -49,16 +52,18 @@ int main()
 
       // display home menu
       displayPreMenu();
+      cout << "Input your selection: ";
 
       // get user selection
       cin >> choice;
-      cin.get(ch);
+      if(cin.peek() != '\0')
+        cin.get(ch);
       cout << endl;
 
       // process user selection
       switch(choice)
       {
-        // LOGIN - Ready for testing, but need to overload = operator in user.h first
+        // LOGIN
         case 1:
           try
           {
@@ -93,6 +98,10 @@ int main()
           {
             // code for handling exceptions
             cout << "Error: " << str << " Try again." << endl;
+          }
+          catch(...)
+          {
+            cout << "Invalid input. Try again." << endl;
           }
          break; //end case 1 (Login)
 
@@ -153,21 +162,22 @@ int main()
     //***USER MENU***//
     while (status == USER) // loop for user menu
     {
-			//reinitializing certain variables
-			tempTitle = "";
-			tempAuth = "";
-			tempDate = 1900;
-			tempCatNum = 000.00;
-      
-			//reinitializing input stream
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			
-			// print user menu
+      //reinitializing certain variables
+      tempTitle = "";
+      tempAuth = "";
+      tempDate = 1900;
+      tempCatNum = 000.00;
+
+      //reinitializing input stream
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+      // print user menu
       displayMenuUser(username);
 
       // get user selection
       cin >> choice;
-      cin.get(ch);
+      if(cin.peek() != '\0')
+        cin.get(ch);
       cout << endl;
 
       // process selection
@@ -221,11 +231,11 @@ int main()
                   cout << "Book borrowed." << endl;
                 }
                 else // book is currently borrowed
-								{
+                {
                   cout << "The book is currently on loan. We have placed a hold "
                        << "on it for you."
                        << endl;
-								}
+                }
                 // add username to book's borrower queue
                 library.borrow(tempTitle, username);
               }
@@ -239,15 +249,16 @@ int main()
                    << " You must return a book you currently have borrowed"
                    << " before borrowing any more."
                    << endl;
-						cout << " Press enter to return to the user menu." << endl;
+            cout << "Press enter to return to the user menu." << endl;
           break;
 
-          //RETURN A BOOK - Ready for testing
+          //RETURN A BOOK
           case 3:
             // print the titles of user's current loans
             cout << "Here are your current loans: " << endl;
             currentUser.printBooks();
             cout << endl;
+
 
             // prompt user for title to remove
             cout << "Enter the title of the book you want to return: ";
@@ -257,7 +268,7 @@ int main()
             // if the book is held by the user
             if(currentUser.hasBook(tempTitle))
             {
-              // remove book from user's list of borrowed books
+              // remove book from user's list of borrowed books and update user
               currentUser.removeBook(tempTitle);
 
               // logic to handle passing book to next user
@@ -267,8 +278,8 @@ int main()
                 cout << "Error in return handler logic.";
             }
             else
-              cout << "Title is incorrect.";
-            cout << " Returning to user menu." << endl;
+              cout << "You do currently hold that title.";
+            cout << " Press enter to return to user menu." << endl;
           break;
 
           //VIEW BORROWED BOOKS
@@ -279,7 +290,7 @@ int main()
             cout << "Press enter to return to the user menu." << endl;
           break;
 
-          //RESET PASSWORD - Ready for testing
+          //RESET PASSWORD
           case 5:
             do
             {
@@ -295,9 +306,12 @@ int main()
                 cout << "Password must be different from your last password." << endl;
             }
             while(newPass == pass);
-						// change password and notify user
-						currentUser.setPassword(newPass);
-            cout << "Successfully changed your password. Press enter to return to the user menu." << endl;
+
+            // change password, update user database, and notify user
+            currentUser.setPassword(newPass);
+            userList.updateUser(currentUser);
+            cout << "Successfully changed your password."
+                 << " Returning to the user menu.\n" << endl;
           break;
 
           // LOGOUT - Ready for testing
@@ -308,26 +322,32 @@ int main()
 
           default:
             cout << "Invalid selection." << endl;
+            //reinitializing input stream (just in case)
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            break;
       }
+			// update user in every while loop
+			userList.updateUser(currentUser);
     }// end while for user menu
 
     while (status == ADMIN) // loop for admin menu
     {
-			//reinitializing certain variables
+      //reinitializing certain variables
       tempTitle = "";
       tempAuth = "";
       tempDate = 1900;
       tempCatNum = 000.00;
-			
-			//reinitializing input stream
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			
+
+      //reinitializing input stream
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
       // print admin menu
       displayMenuAdmin();
 
       // get user selection
       cin >> choice;
-      cin.get(ch);
+      if(cin.peek() != '\0')
+        cin.get(ch);
       cout << endl;
 
       // process selection
@@ -514,7 +534,10 @@ int main()
               break;
 
               default:
-                cout << "Invalid input." << endl;
+                cout << "Invalid selection." << endl;
+                //reinitializing input stream (just in case)
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                break;
             }
           }
           else
@@ -590,6 +613,8 @@ int main()
 
     library.saveToFile(); // save data from library to the data file
     userList.saveToFile(); // save data from user map to the data file
+
+    return 0;
 }
 
 // FUNCTION DEFINITIONS //
@@ -645,26 +670,24 @@ int returnLogicHandler(string title, string returningUser, userDatabase& userDat
 
   if(title == returnBook.getTitle())
   {
-    // pop book borrower queue and get next borrower
-    returnBook.removeBorrower();
     do
     {
+			// pop book borrower queue and get next borrower
+			returnBook.removeBorrower();
       nextBorrowerName = returnBook.currentBorrower();
 
-      // next borrower must exist
+      // next borrower must exist and not be the returning user (in case they "borrowed" it twice)
       if((userDat.findUser(nextBorrowerName)) && (nextBorrowerName != returningUser))
       {
         // user exists
         nextBorrowerUser = userDat.getUser(nextBorrowerName);
       }
-      else if(nextBorrowerName == "")
+      if(nextBorrowerName == "")
       {
         // no user found to give book to
         found = false;
         break;
       }
-      else
-        returnBook.removeBorrower(); // borrower does not exist in userDat
     }
     while(nextBorrowerUser.hasMaxBooks()); // if next borrower does not have max books, then a suitable user has been found
 
@@ -672,9 +695,10 @@ int returnLogicHandler(string title, string returningUser, userDatabase& userDat
     if(found)
     {
       nextBorrowerUser.addBook(title);
-      bookDat.deleteNode(bookDat.getBookFromTitle(title));
-      bookDat.insert(returnBook);
+      userDat.updateUser(nextBorrowerUser);
     }
+		bookDat.deleteNode(bookDat.getBookFromTitle(title));
+    bookDat.insert(returnBook);
     return 1;
   }
   return -1;

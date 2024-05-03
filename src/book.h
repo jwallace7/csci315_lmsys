@@ -165,7 +165,12 @@ void book::removeBorrower()
 { borrowerQueue.deleteQueue(); } // end removeBorrower
 
 std::string book::currentBorrower() const
-{ return borrowerQueue.front(); }
+{
+	if(!borrowerQueue.isEmptyQueue())
+		return borrowerQueue.front();
+	else
+		return "";
+}
 
 // PRINT FUNCTIONS
 void book::printTitle() const

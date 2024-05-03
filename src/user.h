@@ -88,7 +88,7 @@ std::ifstream& operator>>(std::ifstream& inFile, user& newUser)
     std::string line; // String value to read lines
 
     inFile >> newUser.username >> newUser.password >> adminValue; // Get username, password, and admin value
-
+		
     newUser.admin = (adminValue == '1'); // Convert admin value to a boolean variable based on the given character
 
     inFile.ignore(999, '\n'); // Ignore until the next line
@@ -143,6 +143,7 @@ bool user::validate(std::string pass) const
 
 void user::addBook(std::string bookName) {
   if (!hasBook(bookName)) // If the user doesn't have the book already
+	{
     if (!hasMaxBooks()) // If the user's book count isn't full
     {
       int i = 0;
@@ -151,10 +152,12 @@ void user::addBook(std::string bookName) {
       books[i] = bookName;
 
       bookCount += 1; // Increment book count by 1
-    } else
+    }
+		else
       std::cout << "You have the maximum number of books." << std::endl;//end else
-    else
-      std::cout << "You already have this book." << std::endl;//end else
+	}
+  else
+    std::cout << "You already have this book." << std::endl;//end else
 }//end addBook
 
 void user::removeBook(std::string bookName) {
@@ -205,10 +208,13 @@ void user::copyUser(const user& otherUser)
   username = otherUser.username; // Copy the user's username, password, and admin
   password = otherUser.password;
   admin = otherUser.admin;
-
+	
   for (int i = 0; i < 5; i++)
+	{
+		books[i] = "";
     if (otherUser.books[i] != "")
       addBook(otherUser.books[i]);
+	}
 }//end copy function
 
 #endif

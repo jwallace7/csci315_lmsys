@@ -201,9 +201,12 @@ void user::copyUser(const user& otherUser)
   password = otherUser.password;
   admin = otherUser.admin;
 	
-  for (int i = 0; i < 5; i++)
-	{
+	for(int i = 0; i < 5; i++) // initialize books array
 		books[i] = "";
+	bookCount = 0;
+	
+  for (int i = 0; i < 5; i++) // copy from other books array
+	{
     if (otherUser.books[i] != "")
       addBook(otherUser.books[i]);
 	}

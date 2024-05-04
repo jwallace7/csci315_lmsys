@@ -104,7 +104,7 @@ int main()
           }
          break; //end case 1 (Login)
 
-        // REGISTER - Ready for testing
+        // REGISTER
         case 2:
           try
           {
@@ -583,8 +583,14 @@ int main()
             if(userList.findUser(newUsername))
             {
               // remove user and notify Admin
-              userList.removeUser(newUsername);
-              cout << "User deleted. Returning to administrator menu." << endl;
+							if((userList.getUser(newUsername)).hasNoBooks())
+							{
+								userList.removeUser(newUsername);
+								cout << "User deleted. Returning to administrator menu.\n" << endl;
+							}
+							else
+								cout << "Cannot delete user while they have a book on hold."
+										 << " Returning to administrator menu.\n" << endl;
             }
             else
             {

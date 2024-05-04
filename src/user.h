@@ -42,6 +42,9 @@ public:
   bool hasMaxBooks() const; // Checks to see if the user has the maximum number of books.
   // Postcondition: Returns true if the user has the maximum number of books, false otherwise.
 
+	bool hasNoBooks() const; // Checks to see if the user has no books.
+	// Postcondition: Returns true if the user has no books, false otherwise.
+	
   bool validate(std::string pass) const; // Checks to see if password is same as user.
   // Postcondition: Returns true if pass is the same as password.
 
@@ -137,6 +140,9 @@ bool user::isAdmin() const
 
 bool user::hasMaxBooks() const
 { return bookCount == 5; }//end hasMaxBooks
+
+bool user::hasNoBooks() const
+{ return bookCount == 0; }//end hasNoBooks
 
 bool user::validate(std::string pass) const
 { return pass == password; }//end validate

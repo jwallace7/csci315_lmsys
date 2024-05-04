@@ -142,22 +142,14 @@ bool user::validate(std::string pass) const
 { return pass == password; }//end validate
 
 void user::addBook(std::string bookName) {
-  if (!hasBook(bookName)) // If the user doesn't have the book already
+  if (!hasBook(bookName) && !hasMaxBooks()) // If the user doesn't have the book already and book count isn't full
 	{
-    if (!hasMaxBooks()) // If the user's book count isn't full
-    {
-      int i = 0;
-      while(books[i] != "")
-      { i++; }//end while
-      books[i] = bookName;
-
-      bookCount += 1; // Increment book count by 1
-    }
-		else
-      std::cout << "You have the maximum number of books." << std::endl;//end else
+    int i = 0;
+    while(books[i] != "")
+    { i++; }//end while
+    books[i] = bookName;
+    bookCount += 1; // Increment book count by 1
 	}
-  else
-    std::cout << "You already have this book." << std::endl;//end else
 }//end addBook
 
 void user::removeBook(std::string bookName) {

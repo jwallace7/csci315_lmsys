@@ -52,7 +52,6 @@ int main()
 
       // display home menu
       displayPreMenu();
-      cout << "Input your selection: ";
 
       // get user selection
       cin >> choice;
@@ -126,7 +125,8 @@ int main()
             // code to get password for new user
             cout << "Enter a password (no spaces allowed): ";
             cin >> pass;
-            cin.get(ch); // gets next character
+						if(cin.peek() != '\0')
+							cin.get(ch);
             cout << endl;
 
             // if the next character was a space, user incorrectly entered
@@ -140,6 +140,8 @@ int main()
 
             // add current user to database
             userList.addUser(currentUser);
+						
+						cout << "You are now registered in the system. ";
 
             status = USER;
           }
@@ -147,6 +149,7 @@ int main()
           {
             cout << "Error: " << str << endl;
           }
+					cout << "Press enter to continue." << endl;
          break; // end case 2 (Register)
 
         // EXIT
@@ -238,12 +241,12 @@ int main()
                 }
                 // add username to book's borrower queue
                 library.borrow(tempTitle, username);
-              }
+              }// end if
               else // book does not exist
                 cout << "The book, " << tempTitle
                      << " does not exist in the library."
                      << endl;
-            }
+            }// end if
             else
               cout << "You have borrowed the maximum number of books."
                    << " You must return a book you currently have borrowed"
@@ -353,7 +356,7 @@ int main()
       // process selection
       switch(choice)
       {
-        // ADD A BOOK - Ready for testing
+        // ADD A BOOK
         case 1:
           // Prompt for title
           cout << "Enter the title of the book you want to add: ";
@@ -365,7 +368,7 @@ int main()
           if (tempTitle == tempBook.getTitle())
           {
             // book exists, output relevant message
-            cout << "The book already exists in the library. Returning to administrator menu." << endl;
+            cout << "The book already exists in the library. Press enter to return to administrator menu." << endl;
             break;
           }
           else
@@ -393,11 +396,11 @@ int main()
 
             // add tempBook to library
             library.insert(tempBook);
-            cout << "Book added to library. Returning to administrator menu." << endl;
+            cout << "Book added to library. Press enter to return to administrator menu." << endl;
           }
         break;
 
-        // REMOVE A BOOK - ready for Testing
+        // REMOVE A BOOK
         case 2:
           // Prompt for title
           cout << "Input the title of the book you want to remove: ";
@@ -413,44 +416,49 @@ int main()
             // if the book is on loan, it must be returned first
             if(tempBook.isBorrowed())
             {
-              cout << "Cannot delete a book while it is loaned out."
-                   << "\nReturning to adminstrator menu." << endl;
+              cout << "Cannot delete a book while it is loaned out." << endl;
             }
+						else
+						{
 
-            // print information to console
-            cout << "\n-----     BOOK INFO     -----";
-            tempBook.printInfo();
-            cout << "-----------------------------" << endl;
+							// print information to console
+							cout << "\n-----     BOOK INFO     -----";
+							tempBook.printInfo();
+							cout << "-----------------------------" << endl;
 
-            // ask user for confirmation and get user input
-            cout << "\nAre you sure you want to remove the book?";
-            cout << "\nEnter Y to confirm, N to deny: ";
-            cin.get(ch);
-            cout << endl;
+							// ask user for confirmation and get user input
+							cout << "\nAre you sure you want to remove the book?";
+							cout << "\nEnter Y to confirm, N to deny: ";
+							cin.get(ch);
+							cout << endl;
 
-            switch(ch)
-            {
-              // admin confirms, delete book
-              case 'y':
-              case 'Y':
-                library.deleteNode(tempBook);
-                cout << "Book deleted. Returning to menu." << endl;
-              break;
+							switch(ch)
+							{
+								// admin confirms, delete book
+								case 'y':
+								case 'Y':
+									library.deleteNode(tempBook);
+									cout << "Book deleted." << endl;
+								break;
 
-              // admin denies, do nothing
-              case 'n':
-              case 'N':
-                cout << "Returning to menu." << endl;
-              break;
+								// admin denies, do nothing
+								case 'n':
+								case 'N':
+									cout << "Decided not to delete book." << endl;
+								break;
 
-              default:
-                cout << "Invalid input. Returning to menu." << endl;
-            }
-          }
+								default:
+									cout << "Invalid input." << endl;
+							}// end switch
+						}// end else
+          }// end if
+					else
+						cout << "Book does not exist in library.";
+					cout << "Press enter to return to adminstrator menu." << endl;
         break;
         // end case 2 (Remove A Book)
 
-        // UPDATE BOOK INFORMATION - Ready for testing
+        // UPDATE BOOK INFORMATION
         case 3:
           // Prompt for title
           cout << "Input the title of the book you want to update: ";
@@ -464,19 +472,21 @@ int main()
           if(tempBook.getTitle() == tempTitle)
           {
             // print information to console
-            cout << "\n-----     BOOK INFO     -----";
+            cout << "\n-----     BOOK INFO     -----\n";
             tempBook.printInfo();
             cout << "-----------------------------" << endl;
 
 
             // Prompt for which option to update
-            cout << "What would you like to update?"
+            cout << "What would you like to update?\n"
                  << "1 - Title\n"
                  << "2 - Author\n"
                  << "3 - Year Published\n"
                  << "4 - Catalog Number\n"
                  << "Enter the corresponding number: ";
             cin >> choice;
+						if(cin.peek() != '\0')
+							cin.get(ch);
             cout << endl;
 
             switch(choice)
@@ -494,6 +504,7 @@ int main()
 
                 cout << "Updated title successfully.";
               break;
+							// end case 1 (Title)
 
               // AUTHOR
               case 2:
@@ -508,11 +519,15 @@ int main()
 
                 cout << "Updated author successfully.";
               break;
+							// end case 2 (Author)
+							
               // YEAR PUBLISHED
               case 3:
                 // prompt for new date
                 cout << "Enter the new publishing year: ";
                 cin >> tempDate;
+								if(cin.peek() != '\0')
+									cin.get(ch);
                 cout << endl;
 
                 library.deleteNode(tempBook);
@@ -521,43 +536,48 @@ int main()
 
                 cout << "Updated publish year successfully.";
               break;
+							// end case 3 (Year Published)
+							
               // CATALOG NUMBER
               case 4:
                 // prompt for new catalog number
                 cout << "Enter the new catalog number (in the format ###.##): ";
                 cin >> tempCatNum;
+								if(cin.peek() != '\0')
+									cin.get(ch);
                 cout << endl;
 
                 library.deleteNode(tempBook);
                 tempBook.setCatalogNumber(tempCatNum);
                 library.insert(tempBook);
               break;
+							// end case 4 (Catalog Number)
 
               default:
                 cout << "Invalid selection." << endl;
                 //reinitializing input stream (just in case)
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 break;
-            }
-          }
+            }// end switch
+          }//end if
           else
             cout << "Book does not exist in library.";
-          cout << " Returning to administrator menu." << endl;
+          cout << " Press enter to return to administrator menu." << endl;
         break;
         // end case 3 (Update Book Information)
 
-        // VIEW ALL LOANS - Ready for testing
+        // VIEW ALL LOANS
         case 4:
           // print all books currently loaned out from the library
           library.printAllLoans();
+					cout << "\nAll loans printed above. Press enter to return to administrator menu." << endl;
         break;
         // end case 4 (View All Loans)
 
-        // ADD/REMOVE USER - Ready for testing
+        // ADD/REMOVE USER
         case 5:
           // prompt for username
             cout << "Enter the username of the user you wish to add or delete: ";
-            cout << "Please enter the new user's username: ";
             cin >> newUsername;
             cout << endl;
             if(userList.findUser(newUsername))
@@ -592,12 +612,12 @@ int main()
               userList.addUser(newUser);
 
               // notify admin
-              cout << "User added. Returning to administrator menu." << endl;
+              cout << "User added. Returning to administrator menu.\n" << endl;
             }
         break;
         // end case 5 (Add/Remove User)
 
-        // LOGOUT - Ready for testing
+        // LOGOUT
         case 6:
             cout << "You have been successfully logged out.\n";
             status = HOME; // set status to HOME to return to home menu
@@ -628,6 +648,7 @@ void displayPreMenu()
   cout << "1. Login" << endl;
   cout << "2. Register" << endl;
   cout << "3. Exit" << endl;
+	cout << "\nSelect an option: ";
 }// end displayPreMenu()
 
 void displayMenuUser(string name)
@@ -642,12 +663,12 @@ void displayMenuUser(string name)
   cout << "4. View Borrowed Books" << endl;
   cout << "5. Reset Password" << endl;
   cout << "6. Logout" << endl;
-  cout << "\nPlease select an option: ";
+  cout << "\nSelect an option: ";
 }// end displayMenuUser()
 
 void displayMenuAdmin()
 {
-  cout << "Admin Dashboard," << endl;
+  cout << "Admin Dashboard" << endl;
   cout << "-------------" << endl;
   cout << "1. Add a Book" << endl;
   cout << "2. Remove a Book" << endl;
@@ -655,6 +676,7 @@ void displayMenuAdmin()
   cout << "4. View All Loans" << endl;
   cout << "5. Add/Remove User (Admins)" << endl;
   cout << "6. Logout" << endl;
+	cout << "\nSelect an option: ";
 }// end displayMenuAdmin()
 
 int returnLogicHandler(string title, string returningUser, userDatabase& userDat, bookDatabase& bookDat)

@@ -317,7 +317,7 @@ int main()
                  << " Returning to the user menu.\n" << endl;
           break;
 
-          // LOGOUT - Ready for testing
+          // LOGOUT
           case 6:
             cout << "You have been successfully logged out.\n";
             status = HOME; // set status to HOME to return to home menu
@@ -454,7 +454,7 @@ int main()
           }// end if
 					else
 						cout << "Book does not exist in library.";
-					cout << "Press enter to return to adminstrator menu." << endl;
+					cout << "\nPress enter to return to adminstrator menu." << endl;
         break;
         // end case 2 (Remove A Book)
 
@@ -562,7 +562,7 @@ int main()
           }//end if
           else
             cout << "Book does not exist in library.";
-          cout << " Press enter to return to administrator menu." << endl;
+          cout << "\nPress enter to return to administrator menu." << endl;
         break;
         // end case 3 (Update Book Information)
 
@@ -580,7 +580,11 @@ int main()
             cout << "Enter the username of the user you wish to add or delete: ";
             cin >> newUsername;
             cout << endl;
-            if(userList.findUser(newUsername))
+						
+						if(newUsername == username)
+							cout << "You cannot delete yourself, silly administrator. Have you gone rogue?\n"
+									 << "Returning to administrator menu.\n" << endl;
+            else if(userList.findUser(newUsername))
             {
               // remove user and notify Admin
 							if((userList.getUser(newUsername)).hasNoBooks())

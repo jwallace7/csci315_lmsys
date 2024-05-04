@@ -10,11 +10,23 @@ Smith
 9182
 Raymond 0
 
+C++ Programming
+D.S. Malik
+2022
+999.67
+0
+
 History of Programming
 Miles
 2012
 73481
 Raymond 0
+
+New Book
+Solloman
+1674
+65.03
+Notausername 0
 
 Why Gaming is Addictive
 Julian
@@ -32,5 +44,17 @@ How to Program for Dummies
 Roman
 1998
 12833
+0
+
+Carry On, Jeeves
+Wodehouse
+1927
+654.23
+0
+
+The Count of Monte Cristo
+Dumas
+2003
+134.56
 0
 -999

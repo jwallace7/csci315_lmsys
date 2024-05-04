@@ -49,9 +49,6 @@ int main()
       // reinitialize variables
       username = "";
       pass = "";
-			
-			//reinitializing input stream
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
       // display home menu
       displayPreMenu();

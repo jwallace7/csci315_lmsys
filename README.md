@@ -1,4 +1,4 @@
-CSCI 315 Group 3
+CSCI 315 Group 3 Final Project
 
 This project contains the code for a Library Management system. Development roles are listed below.
 
